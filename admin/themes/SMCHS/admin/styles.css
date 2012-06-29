@@ -43,6 +43,18 @@ h2
 	margin-bottom: 6px;
 }
 
+a
+{
+    text-decoration: none;
+    color: #000099;
+}
+
+.error
+{
+    color: red;
+    font-weight: bold;
+}
+
 #menubar
 {
 	width: 1000px;

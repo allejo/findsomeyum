@@ -2,3 +2,5 @@ Change password/update profiles/etc.
 "UPDATE  `smchs`.`users` SET  `last_login` =  '2012-06-26 00:00:00' WHERE  `users`.`user_id` =4 LIMIT 1 ;"
 
 System dev :  "OR die ('sql error:' . mysqli_connect_error())"
+
+Input sanitation for all forums >.>

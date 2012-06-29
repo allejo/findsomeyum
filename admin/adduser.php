@@ -1,8 +1,6 @@
 <?php
-    //TODO: Fix the layout and spaces of each html page line of code
-    
     session_start();
-    
+
     //Build the header and the navigation area
     include("themes/SMCHS/admin/header-top.php");
     echo "\n        <title>XiON: Add New User</title>\n";
@@ -11,7 +9,8 @@
     include("themes/SMCHS/admin/header-bottom.php");
     include("themes/SMCHS/admin/menubar.php");
     include("themes/SMCHS/admin/header-end.php");
-    echo "\n";
+    echo"\n";
+    echo "\n            <div id=\"main_column\">\n";
     
     
     if(!session_is_registered(xi_username)) //The user is not logged in or got logged out due to inactivity
@@ -21,7 +20,7 @@
     
     if ($_SESSION['xi_userType'] != 'admin' && $_SESSION['xi_userType'] != 'systemDev') //The user does not have the permission to add a new user
     {
-        echo '<h2>Permission Denied</h2>
+    	echo '<h2>Permission Denied</h2>
               <p>This page was reached in error or you do not have permission to view this page. If this was a mistake, please contact the system administrator.</p>';
               
         include("themes/SMCHS/admin/footer.php");
@@ -94,29 +93,29 @@
         //Get the permissions for the user
         switch ($_POST['userType'])
         {
-            case 'none':
-            {
-                $errors[] = 'You forgot to specify the user type.';
-            }
-            break;
-            
-            case 'admin':
-            {
-                $userType = 'admin';
-            }
-            break;
-            
-            case 'editor':
-            {
-                $userType = 'editor';
-            }
-            break;
-            
-            case 'systemDev':
-            {
-                $userType = 'systemDev';
-            }
-            break;
+	        case 'none':
+	        {
+		        $errors[] = 'You forgot to specify the user type.';
+	        }
+	        break;
+	        
+	        case 'admin':
+	        {
+		        $userType = 'admin';
+	        }
+	        break;
+	        
+	        case 'editor':
+	        {
+		        $userType = 'editor';
+	        }
+	        break;
+	        
+	        case 'sytemDev':
+	        {
+		        $userType = 'systemDev';
+	        }
+	        break;
         }
         
         if (empty($errors)) //The user imputted all the fields perfectly without error
@@ -158,70 +157,56 @@
         }
     }
 ?>
+                <h2>Add New User</h2>
 
-            <h2>Add New User</h2>
-
-            <table width="320" border="0" cellpadding="0" cellspacing="1" bgcolor="#CCCCCC">
-                <tr>
-                    <form style="text-align:justify;" action="./adduser.php" method="post">
-                        <td>
-                            <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#FFFFFF">
-                                <tr>
-                                    <td width="200">Username</td>
-                                    <td width="6">:</td>
-                                    <td width="200"><input type="text" name="username" size="22" maxlength="30" value="<?php if (isset($_POST['username'])) echo $_POST['username']; ?>" /></td>
-                                </tr>
-                                <tr>
-                                    <td width="200">First Name</td>
-                                    <td width="6">:</td>
-                                    <td width="200"><input type="text" name="first_name" size="22" maxlength="20" value="<?php if (isset($_POST['first_name'])) echo $_POST['first_name']; ?>" /></td>
-                                </tr>
-                                <tr>
-                                    <td width="200">Last Name</td>
-                                    <td width="6">:</td>
-                                    <td width="200"><input type="text" name="last_name" size="22" maxlength="30" value="<?php if (isset($_POST['last_name'])) echo $_POST['last_name']; ?>" /></td>
-                                </tr>
-                                <tr>
-                                    <td width="200">Email Address</td>
-                                    <td width="6">:</td>
-                                    <td width="200"><input type="text" name="email" size="22" maxlength="40" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" /></td>
-                                </tr>
-                                <tr>
-                                    <td width="200">Password</td>
-                                    <td width="6">:</td>
-                                    <td width="200"><input type="password" name="pass1" size="22" maxlength="30" /></td>
-                                </tr>
-                                <tr>
-                                    <td width="200">Confirm Password</td>
-                                    <td width="6">:</td>
-                                    <td width="200"><input type="password" name="pass2" size="22" maxlength="30" /></td>
-                                </tr>
-                                <tr>
-                                    <td width="200">User Type</td>
-                                    <td width="6">:</td>
-                                    <td width="200">
-                                        <select name="userType">
-                                            <option value="none">----------------</option>
-                                            <option value="admin">Administrator</option>
-                                            <option value="editor">Editor</option>
-                                            <option value="systemDev">System Developer</option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>&nbsp;</td>
-                                    <td>&nbsp;</td>
-                                    <td>
-                                        <input type="submit" name="submit" value="Create User" />
-                                        <input type="hidden" name="submitted" value="TRUE" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </form>
-                </tr>
-            </table>
-
+                <form style="text-align:justify;" action="./adduser.php" method="post">
+                    <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                        <tr>
+                            <td width="200">Username</td>
+                            <td width="200"><input type="text" name="username" size="22" maxlength="30" value="<?php if (isset($_POST['username'])) echo $_POST['username']; ?>" /></td>
+                        </tr>
+                        <tr>
+                            <td width="200">First Name</td>
+                            <td width="200"><input type="text" name="first_name" size="22" maxlength="20" value="<?php if (isset($_POST['first_name'])) echo $_POST['first_name']; ?>" /></td>
+                        </tr>
+                        <tr>
+                            <td width="200">Email Address</td>
+                            <td width="200"><input type="text" name="email" size="22" maxlength="40" value="<?php if (isset($_POST['email'])) echo $_POST['email']; ?>" /></td>
+                        </tr>
+                        <tr>
+                            <td width="200">Password</td>
+                            <td width="200"><input type="password" name="pass1" size="22" maxlength="30" /></td>
+                        </tr>
+                        <tr>
+                            <td width="200">Confirm Password</td>
+                            <td width="200"><input type="password" name="pass2" size="22" maxlength="30" /></td>
+                        </tr>
+                        <tr>
+                            <td width="200">User Type</td>
+                            <td width="200">
+                                <select name="userType">
+                                    <option value="none">----------------</option>
+                                    <option value="admin">Administrator</option>
+                                    <option value="editor">Editor</option>
+                                    <option value="systemDev">System Developer</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td>
+                                <input type="submit" name="submit" value="Create User" />
+                                <input type="hidden" name="submitted" value="TRUE" />
+                            </td>
+                        </tr>
+                    </table>
+                </form>
 <?php
-    include("themes/SMCHS/admin/footer.php");
+    echo "            </div> <!-- End Main Column -->
+            
+            <div id=\"sidebar\">\n";
+    include("themes/SMCHS/admin/users-sidebar.php");
+    echo "            </div> <!-- End Sidebar -->\n\n";
+
+    include("themes/SMCHS/admin/footer.php");    
 ?>
