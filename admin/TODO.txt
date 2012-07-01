@@ -4,3 +4,5 @@ Change password/update profiles/etc.
 System dev :  "OR die ('sql error:' . mysqli_connect_error())"
 
 Input sanitation for all forums >.>
+
+or die("Error: ".mysqli_error($dbc));

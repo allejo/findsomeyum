@@ -15,7 +15,6 @@
     echo"\n";
     echo "\n            <div id=\"main_column\">\n";
     
-    
     if(!session_is_registered(xi_username)) //The user is not logged in or got logged out due to inactivity
     {
         header("location:login.php"); //Send them to the login page

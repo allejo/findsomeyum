@@ -1,4 +1,18 @@
 <?php
+    /*
+        Copyright Sujevo Software, 2012. All Rights Reserved.
+        http://sujevo.com
+        
+        Usage of this system is allowed with expressed written
+        permission of the owner. This source may not be modified
+        or built upon without expressed written permission from
+        the copyright holder.
+        This software is provided "AS IS" and at no time is the
+        developer or distributed of this software is liable for
+        any damage caused with the use or misuse of the this
+        software.
+    */
+    
     ob_start();
     
     require_once('mysql_connection.php');
@@ -7,8 +21,7 @@
     $myusername=$_POST['username']; 
     $mypassword=$_POST['password']; 
     
-    // To protect MySQL injection (more detail about MySQL injection)
-    $myusername = stripslashes($myusername);
+    // To protect MySQL injections... Those damn pricks
     $mypassword = stripslashes($mypassword);
     $myusername = mysqli_real_escape_string($dbc, $myusername);
     $mypassword = mysqli_real_escape_string($dbc, $mypassword);
@@ -33,6 +46,7 @@
     else
     {
         echo "Wrong Username or Password";
+        header("location:../login.php?login=false");
     }
     
     ob_end_flush();

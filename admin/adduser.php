@@ -1,4 +1,18 @@
 <?php
+    /*
+        Copyright Sujevo Software, 2012. All Rights Reserved.
+        http://sujevo.com
+        
+        Usage of this system is allowed with expressed written
+        permission of the owner. This source may not be modified
+        or built upon without expressed written permission from
+        the copyright holder.
+        This software is provided "AS IS" and at no time is the
+        developer or distributed of this software is liable for
+        any damage caused with the use or misuse of the this
+        software.
+    */
+    
     session_start();
 
     //Build the header and the navigation area
@@ -28,19 +42,30 @@
         exit(); //Kill the script to avoid malicious injections
     }
 
+    require_once('includes/mysql_connection.php'); //Connect to the MySQL database
+    
     // Check if the form has been submitted:
     if (isset($_POST['submitted']))
     {
         $errors = array(); // Initialize an error array.
         
+        //Santitation and checking if username exists already
+        $username = trim($_POST['username']);
+        $username = stripslashes($username);
+        $username = mysqli_real_escape_string($dbc, $username);
+        require_once("includes/mysql_connection.php");
+        $checkUserNameQuery = "SELECT username FROM users WHERE username = '$username'";
+        $result = @mysqli_query($dbc, $checkUserNameQuery);
+        $row = mysqli_fetch_array($result);
+        $count = mysqli_num_rows($result);
         //Check the first name
         if (empty($_POST['username']))
         {
             $errors[] = 'You forgot to enter your desired username.';
         }
-        else
+        else if ($count == 1)
         {
-            $username = trim($_POST['username']);
+            $errors[] = 'The specified username is not available.';
         }
         
         //Check the first name
@@ -51,6 +76,8 @@
         else
         {
             $first_name = trim($_POST['first_name']);
+            $first_name = stripslashes($first_name);
+            $first_name = mysqli_real_escape_string($dbc, $first_name);
         }
             
         //And check the last name...
@@ -61,6 +88,8 @@
         else
         {
             $last_name = trim($_POST['last_name']);
+            $last_name = stripslashes($last_name);
+            $last_name = mysqli_real_escape_string($dbc, $last_name);
         }
             
         //And check the email...
@@ -71,6 +100,8 @@
         else
         {
             $email = trim($_POST['email']);
+            $email = stripslashes($email);
+            $email = mysqli_real_escape_string($dbc, $email);
         }
         
         //Check to make sure that the password and confirmation are the same and are valid
@@ -83,6 +114,8 @@
             else
             {
                 $password = trim($_POST['pass1']);
+                $password = stripslashes($password);
+                $password = mysqli_real_escape_string($dbc, $password);
             }
         }
         else
@@ -111,30 +144,43 @@
 	        }
 	        break;
 	        
-	        case 'sytemDev':
+	        case 'systemDev':
 	        {
 		        $userType = 'systemDev';
 	        }
 	        break;
         }
         
+        $userType = stripslashes($userType);
+        $userType = mysqli_real_escape_string($dbc, $userType);
+        
         if (empty($errors)) //The user imputted all the fields perfectly without error
         {
-            require_once('includes/mysql_connection.php'); //Connect to the MySQL database
-            
             //Create the query, execute it, and save the values returned into an array
             $query = "INSERT INTO users (user_id, username, first_name, last_name, email, pass, registration_date, userType) VALUES (NULL, '$username', '$first_name', '$last_name', '$email', SHA1('$password'), NOW(), '$userType')";
             $run_query = @mysqli_query($dbc, $query);
             
             if ($run_query) //Hurray no errors!
             {
-                echo '<h2>Account Created Successfully</h2>
-                      <p>The account is now available for immediate use.</p>';
+                echo "<h2>Account Created Successfully</h2>
+                      <p>   \nThe account is now available for immediate use.
+                        \n<br />
+                        \n<br />
+                        \n<a href=\"./adduser.php\">&lt; Add Another User</a>
+                        \n</p>";
+                echo "\n            </div> <!-- End Main Column -->
+                        <div id=\"sidebar\">\n";
+                include("themes/SMCHS/admin/users-sidebar.php");
+                echo "            </div> <!-- End Sidebar -->\n\n";
             }
             else //Crap. Something went wrong
             {
-                echo '<h2>Account Creation Failed</h2>
-                      <p>The account could not be created due to a system error. Please contact the system administrator.</p>';
+                echo "<h2>Account Creation Failed</h2>
+                      <p>The account could not be created due to a system error. Please contact the system administrator.
+                      \n<br />
+                      \n<br />
+                      \n<a href=\"./adduser.php\">&lt; Add Another User</a>
+                      \n</p></p>";
             }
             
             mysqli_close($dbc); //This is redundant but it's a good habit
@@ -145,7 +191,7 @@
         }
         else //The user forgot to fill in one of the fields
         {
-            echo '<h1>Error!</h1>
+            echo '<h2>Error!</h2>
                   <p class=”error”>The following error(s) occurred:<br />';
                 
             foreach ($errors as $msg) //Go through all the errors and output them
@@ -153,7 +199,7 @@
                 echo " - $msg<br />\n";
             }
             
-            echo '</p><p>Please try again.</p><p><br /></p>';
+            echo "</p>\n<br />\n<p>Please try again.</p><p><br /></p>";
         }
     }
 ?>
@@ -168,6 +214,10 @@
                         <tr>
                             <td width="200">First Name</td>
                             <td width="200"><input type="text" name="first_name" size="22" maxlength="20" value="<?php if (isset($_POST['first_name'])) echo $_POST['first_name']; ?>" /></td>
+                        </tr>
+                        <tr>
+                            <td width="200">Last Name</td>
+                            <td width="200"><input type="text" name="last_name" size="22" maxlength="30" value="<?php if (isset($_POST['last_name'])) echo $_POST['last_name']; ?>" /></td>
                         </tr>
                         <tr>
                             <td width="200">Email Address</td>

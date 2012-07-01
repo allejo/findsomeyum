@@ -1,4 +1,18 @@
 <?php
+    /*
+        Copyright Sujevo Software, 2012. All Rights Reserved.
+        http://sujevo.com
+        
+        Usage of this system is allowed with expressed written
+        permission of the owner. This source may not be modified
+        or built upon without expressed written permission from
+        the copyright holder.
+        This software is provided "AS IS" and at no time is the
+        developer or distributed of this software is liable for
+        any damage caused with the use or misuse of the this
+        software.
+    */
+    
     session_start();
     require_once("includes/mysql_connection.php");
     
@@ -29,42 +43,65 @@
     {
         if (!empty($_POST['first_name']) && $_POST['first_name'] != $row[2])
         {
-            $updateFirstNameQuery = "UPDATE `smchs`.`users` SET  `first_name` = '" . $_POST['first_name'] . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            $newFirstName = trim($_POST['first_name']);
+            $newFirstName = stripslashes($newFirstName);
+            $updateFirstNameQuery = "UPDATE `smchs`.`users` SET  `first_name` = '" . $newFirstName . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updateFirstNameQuery);
         }
         
         if (!empty($_POST['last_name']) && $_POST['last_name'] != $row[3])
         {
-            $updateLastNameQuery = "UPDATE `smchs`.`users` SET  `last_name` = '" . $_POST['last_name'] . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            $newLastName = trim($_POST['last_name']);
+            $newLastName = stripslashes($newLastName);
+            $updateLastNameQuery = "UPDATE `smchs`.`users` SET  `last_name` = '" . $newLastName . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updateLastNameQuery);
         }
         
         if (!empty($_POST['email']) && $_POST['email'] != $row[4])
         {
-            
-            $updateEmailQuery = "UPDATE `smchs`.`users` SET  `email` = '" . $_POST['email'] . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            $newEmail = trim($_POST['email']);
+            $newEmail = stripslashes($newEmail);
+            $updateEmailQuery = "UPDATE `smchs`.`users` SET  `email` = '" . $newEmail . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updateEmailQuery);
         }
         
         if ($_POST['userType'] && $_POST['userType'] != $row[5])
         {
-	        $updateEmailQuery = "UPDATE `smchs`.`users` SET  `userType` = '" . $_POST['userType'] . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            $newUserType = trim($_POST['userType']);
+            $newUserType = stripslashes($newUserType);
+	        $updateEmailQuery = "UPDATE `smchs`.`users` SET  `userType` = '" . $newUserType . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updateEmailQuery);
         }
         
         if (!empty($_POST['newpassword']) && !empty($_POST['confirmnewpassword']) && $_POST['newpassword'] == $_POST['confirmnewpassword'])
         {
-            $updatePasswordQuery = "UPDATE `smchs`.`users` SET  `pass` = '" . $_POST['newpassword'] . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            $newPassword = trim($_POST['newpassword']);
+            $newPassword = stripslashes($newPassword);
+            $newPassword = sha1($newPassword);
+            $updatePasswordQuery = "UPDATE `smchs`.`users` SET  `pass` = '" . $newPassword . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updatePasswordQuery);
         }
         else if (empty($_POST['newpassword']) && empty($_POST['confirmnewpassword']))
         {
-            //Do nothing
+            //Purposely do nothing because we don't want to do anything if a new password wasn't requested
         }
         else
         {
             echo "<p class=\"error\">New passwords do not match.</p>";
         }
+        
+        echo "\n                User information sucessfully updated.
+            \n<br />
+            \n<br />
+            <a href=\"./edituser.php?userid=$userToEdit\">&lt; Go Back</a>
+            \n        </div> <!-- End Main Column -->
+                
+                <div id=\"sidebar\">\n";
+        include("themes/SMCHS/admin/users-sidebar.php");
+        echo "            </div> <!-- End Sidebar -->\n\n";
+
+        include("themes/SMCHS/admin/footer.php");
+        exit();
     }
 ?>
                 <h2>User Profile</h2>
@@ -93,21 +130,21 @@
                                     <?php
                                         if ($row[5] == "admin")
                                         {
-                                            echo "                                    <option value=\"admin\">Adminstrator</option>";
-                                            echo "                                    <option value=\"editor\">Editor</option>";
-                                            echo "                                    <option value=\"systemDev\">System Developer</option>";
+                                            echo "<option value=\"admin\">Adminstrator</option>\n";
+                                            echo "                                    <option value=\"editor\">Editor</option>\n";
+                                            echo "                                    <option value=\"systemDev\">System Developer</option>\n";
                                         }
                                         else if ($row[5] == "editor")
                                         {
-                                            echo "                                    <option value=\"editor\">Editor</option>";
-                                            echo "                                    <option value=\"admin\">Administrator</option>";
-                                            echo "                                    <option value=\"systemDev\">System Developer</option>";
+                                            echo "<option value=\"editor\">Editor</option>\n";
+                                            echo "                                    <option value=\"admin\">Administrator</option>\n";
+                                            echo "                                    <option value=\"systemDev\">System Developer</option>\n";
                                         }
                                         else if ($row[5] == "systemDev")
                                         {
-                                            echo "                                    <option value=\"systemDev\">System Developer</option>";
-                                            echo "                                    <option value=\"admin\">Administrator</option>";
-                                            echo "                                    <option value=\"editor\">Editor</option>";
+                                            echo "<option value=\"systemDev\">System Developer</option>\n";
+                                            echo "                                    <option value=\"admin\">Administrator</option>\n";
+                                            echo "                                    <option value=\"editor\">Editor</option>\n";
                                         }
                                     ?>
                                 </select>

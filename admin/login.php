@@ -1,4 +1,18 @@
 <?php
+    /*
+        Copyright Sujevo Software, 2012. All Rights Reserved.
+        http://sujevo.com
+        
+        Usage of this system is allowed with expressed written
+        permission of the owner. This source may not be modified
+        or built upon without expressed written permission from
+        the copyright holder.
+        This software is provided "AS IS" and at no time is the
+        developer or distributed of this software is liable for
+        any damage caused with the use or misuse of the this
+        software.
+    */
+    
     include("themes/SMCHS/admin/header-top.php");
     echo "\n        <title>Administrator Login</title>\n";
     include("themes/SMCHS/admin/header-middle.php");
@@ -7,6 +21,11 @@
     include("themes/SMCHS/admin/menubar.php");
     include("themes/SMCHS/admin/header-end.php");
     echo"\n";
+    
+    if ($_GET['login'] == "false")
+    {
+        echo "            <p align=\"center\" class=\"error\">Username or password is incorrect.</p><br />\n\n";
+    }
 ?>
             <div align="center">
                 <table width="300" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#CCCCCC">
@@ -38,6 +57,7 @@
                     </tr>
                 </table>
             </div>
+            
 <?php
     include("themes/SMCHS/admin/footer.php");
 ?>
