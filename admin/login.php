@@ -19,13 +19,13 @@
 	    header("location:login_success.php");
 	}
 
-    include("themes/SMCHS/admin/header-top.php");
+    include("themes/admin/header-top.php");
     echo "\n        <title>Administrator Login</title>\n";
-    include("themes/SMCHS/admin/header-middle.php");
+    include("themes/admin/header-middle.php");
     echo "\n                <h1>XiON Administration</h1>\n";
-    include("themes/SMCHS/admin/header-bottom.php");
-    include("themes/SMCHS/admin/menubar.php");
-    include("themes/SMCHS/admin/header-end.php");
+    include("themes/admin/header-bottom.php");
+    include("themes/admin/menubar.php");
+    include("themes/admin/header-end.php");
     echo"\n";
     
     if ($_GET['login'] == "false")
@@ -65,5 +65,5 @@
             </div>
             
 <?php
-    include("themes/SMCHS/admin/footer.php");
+    include("themes/admin/footer.php");
 ?>

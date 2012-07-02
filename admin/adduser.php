@@ -16,13 +16,13 @@
     session_start();
 
     //Build the header and the navigation area
-    include("themes/SMCHS/admin/header-top.php");
+    include("themes/admin/header-top.php");
     echo "\n        <title>XiON: Add New User</title>\n";
-    include("themes/SMCHS/admin/header-middle.php");
+    include("themes/admin/header-middle.php");
     echo "\n                <h1>XiON User Management</h1>\n";
-    include("themes/SMCHS/admin/header-bottom.php");
-    include("themes/SMCHS/admin/menubar.php");
-    include("themes/SMCHS/admin/header-end.php");
+    include("themes/admin/header-bottom.php");
+    include("themes/admin/menubar.php");
+    include("themes/admin/header-end.php");
     echo"\n";
     echo "\n            <div id=\"main_column\">\n";
     
@@ -37,7 +37,7 @@
     	echo '<h2>Permission Denied</h2>
               <p>This page was reached in error or you do not have permission to view this page. If this was a mistake, please contact the system administrator.</p>';
               
-        include("themes/SMCHS/admin/footer.php");
+        include("themes/admin/footer.php");
         
         exit(); //Kill the script to avoid malicious injections
     }
@@ -173,7 +173,7 @@
                         \n</p>";
                 echo "\n            </div> <!-- End Main Column -->
                         <div id=\"sidebar\">\n";
-                include("themes/SMCHS/admin/users-sidebar.php");
+                include("themes/admin/users-sidebar.php");
                 echo "            </div> <!-- End Sidebar -->\n\n";
             }
             else //Crap. Something went wrong
@@ -188,7 +188,7 @@
             
             mysqli_close($dbc); //This is redundant but it's a good habit
             
-            include("themes/SMCHS/admin/footer.php");
+            include("themes/admin/footer.php");
             
             exit(); //We're done, prevent malicious code injection
         }
@@ -258,8 +258,8 @@
     echo "            </div> <!-- End Main Column -->
             
             <div id=\"sidebar\">\n";
-    include("themes/SMCHS/admin/users-sidebar.php");
+    include("themes/admin/users-sidebar.php");
     echo "            </div> <!-- End Sidebar -->\n\n";
 
-    include("themes/SMCHS/admin/footer.php");    
+    include("themes/admin/footer.php");    
 ?>

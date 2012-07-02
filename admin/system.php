@@ -14,26 +14,99 @@
     */
     
     session_start();
+    require_once('includes/mysql_connection.php');
     
     if(!session_is_registered(xi_username)) //The user is not logged in or got logged out due to inactivity
     {
         header("location:login.php"); //Send them to the login page
     }
     
-    include("themes/SMCHS/admin/header-top.php");
-    echo "\n        <title>Administrator Login</title>\n";
-    include("themes/SMCHS/admin/header-middle.php");
-    echo "\n                <h1>XiON Administration</h1>\n";
-    include("themes/SMCHS/admin/header-bottom.php");
-    include("themes/SMCHS/admin/menubar.php");
-    include("themes/SMCHS/admin/header-end.php");
+    include("themes/admin/header-top.php");
+    echo "\n        <title>XiON: System Information</title>\n";
+    include("themes/admin/header-middle.php");
+    echo "\n                <h1>XiON System</h1>\n";
+    include("themes/admin/header-bottom.php");
+    include("themes/admin/menubar.php");
+    include("themes/admin/header-end.php");
     echo"\n";
     
-    echo "<div id=\"main_column\">Jeeze Jamila... I'm still working on this... Calm yo'self, girl!!! D:&lt;</div>";
+    echo "            <div id=\"main_column\">\n";
+    $getLogDatabase = "SELECT * FROM logs";
+    $result = @mysqli_query($dbc, $getLogDatabase);
+    $numberOfRows = mysqli_num_rows($result);
     
-    echo "            </div> <!-- End Main Column -->
+    echo "                <table  width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\">
+                    <tr>
+                        <td><strong>Time</strong></td>
+                        <td><strong>User</strong></td>
+                        <td><strong>Description</strong></td>
+                    </tr>";
+    
+    if ($_GET['view'] == "admin")
+    {
+        for ($i = 0; $i < $numberOfRows; $i++)
+        {
+            $row = mysqli_fetch_array($result);
+            if ($row[1] == "editUser" || $row[1] == "deleteUser" || $row[1] == "addUser")
+            {
+                echo "\n                    <tr>
+                        <td>$row[0]</td>
+                        <td>$row[2] ($row[3])</td>
+                        <td>$row[4]</td>
+                    </tr>";
+            }
+        }
+    }
+    else if ($_GET['view'] == "editor")
+    {
+        for ($i = 0; $i < $numberOfRows; $i++)
+        {
+            $row = mysqli_fetch_array($result);
+            if ($row[1] == "editContent")
+            {
+                echo "\n                    <tr>
+                        <td>$row[0]</td>
+                        <td>$row[2] ($row[3])</td>
+                        <td>$row[4]</td>
+                    </tr>";
+            }
+        }
+    }
+    else if ($_GET['view'] == "login")
+    {
+        for ($i = 0; $i < $numberOfRows; $i++)
+        {
+            $row = mysqli_fetch_array($result);
+            if ($row[1] == "login")
+            {
+                echo "\n                    <tr>
+                        <td>$row[0]</td>
+                        <td>$row[2] ($row[3])</td>
+                        <td>$row[4]</td>
+                    </tr>";
+            }
+        }
+    }
+    else
+    {
+        for ($i = 0; $i < $numberOfRows; $i++)
+        {
+            $row = mysqli_fetch_array($result);
+            echo "\n                    <tr>
+                        <td>$row[0]</td>
+                        <td>$row[2] ($row[3])</td>
+                        <td>$row[4]</td>
+                    </tr>";
+        }
+    }
+    
+    echo "\n                </table>";
+    echo "\n            </div> <!-- End Main Column -->
             
             ";
+    echo "<div id=\"sidebar\">\n";
+    include("themes/admin/system-sidebar.php");
+    echo "            </div> <!-- End Sidebar -->\n\n";
 
-    include("themes/SMCHS/admin/footer.php");  
+    include("themes/admin/footer.php");  
 ?>
