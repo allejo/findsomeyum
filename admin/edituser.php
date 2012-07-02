@@ -15,6 +15,7 @@
     
     session_start();
     require_once("includes/mysql_connection.php");
+	require_once("includes/auxiliaryFunctions.php");
     
     if(!session_is_registered(xi_username)) //If the user is not logged in, make them login
     {
@@ -43,6 +44,9 @@
     {
         if (!empty($_POST['first_name']) && $_POST['first_name'] != $row[2])
         {
+			$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'editUser', '$adminUserName', '$userIP', '$adminUserName edited $row[1]\'s first name.')";
+	        $run_query = @mysqli_query($dbc, $logQuery);
+	
             $newFirstName = trim($_POST['first_name']);
             $newFirstName = stripslashes($newFirstName);
             $updateFirstNameQuery = "UPDATE `smchs`.`users` SET  `first_name` = '" . $newFirstName . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
@@ -51,6 +55,9 @@
         
         if (!empty($_POST['last_name']) && $_POST['last_name'] != $row[3])
         {
+			$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'editUser', '$adminUserName', '$userIP', '$adminUserName edited $row[1]\'s last name.')";
+	        $run_query = @mysqli_query($dbc, $logQuery);
+	
             $newLastName = trim($_POST['last_name']);
             $newLastName = stripslashes($newLastName);
             $updateLastNameQuery = "UPDATE `smchs`.`users` SET  `last_name` = '" . $newLastName . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
@@ -59,6 +66,9 @@
         
         if (!empty($_POST['email']) && $_POST['email'] != $row[4])
         {
+			$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'editUser', '$adminUserName', '$userIP', '$adminUserName edited $row[1]\'s email.')";
+	        $run_query = @mysqli_query($dbc, $logQuery);
+	
             $newEmail = trim($_POST['email']);
             $newEmail = stripslashes($newEmail);
             $updateEmailQuery = "UPDATE `smchs`.`users` SET  `email` = '" . $newEmail . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
@@ -67,6 +77,9 @@
         
         if ($_POST['userType'] && $_POST['userType'] != $row[5])
         {
+			$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'editUser', '$adminUserName', '$userIP', '$adminUserName edited $row[1]\'s user type.')";
+	        $run_query = @mysqli_query($dbc, $logQuery);
+	
             $newUserType = trim($_POST['userType']);
             $newUserType = stripslashes($newUserType);
 	        $updateEmailQuery = "UPDATE `smchs`.`users` SET  `userType` = '" . $newUserType . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
@@ -75,6 +88,9 @@
         
         if (!empty($_POST['newpassword']) && !empty($_POST['confirmnewpassword']) && $_POST['newpassword'] == $_POST['confirmnewpassword'])
         {
+			$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'editUser', '$adminUserName', '$userIP', '$adminUserName edited $row[1]\'s password.')";
+	        $run_query = @mysqli_query($dbc, $logQuery);
+	
             $newPassword = trim($_POST['newpassword']);
             $newPassword = stripslashes($newPassword);
             $newPassword = sha1($newPassword);
@@ -90,7 +106,7 @@
             echo "<p class=\"error\">New passwords do not match.</p>";
         }
         
-        echo "\n                User information sucessfully updated.
+        echo "\n                User information successfully updated.
             \n<br />
             \n<br />
             <a href=\"./edituser.php?userid=$userToEdit\">&lt; Go Back</a>

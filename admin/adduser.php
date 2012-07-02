@@ -42,7 +42,8 @@
         exit(); //Kill the script to avoid malicious injections
     }
 
-    require_once('includes/mysql_connection.php'); //Connect to the MySQL database
+    require_once("includes/mysql_connection.php"); //Connect to the MySQL database
+    require_once("includes/auxiliaryFunctions.php");
     
     // Check if the form has been submitted:
     if (isset($_POST['submitted']))
@@ -53,7 +54,6 @@
         $username = trim($_POST['username']);
         $username = stripslashes($username);
         $username = mysqli_real_escape_string($dbc, $username);
-        require_once("includes/mysql_connection.php");
         $checkUserNameQuery = "SELECT username FROM users WHERE username = '$username'";
         $result = @mysqli_query($dbc, $checkUserNameQuery);
         $row = mysqli_fetch_array($result);
@@ -156,6 +156,9 @@
         
         if (empty($errors)) //The user imputted all the fields perfectly without error
         {
+			$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'addUser', '$adminUserName', '$userIP', '$adminUserName created new user account for $username.')";
+	        $run_query = @mysqli_query($dbc, $logQuery);
+	
             //Create the query, execute it, and save the values returned into an array
             $query = "INSERT INTO users (user_id, username, first_name, last_name, email, pass, registration_date, userType) VALUES (NULL, '$username', '$first_name', '$last_name', '$email', SHA1('$password'), NOW(), '$userType')";
             $run_query = @mysqli_query($dbc, $query);

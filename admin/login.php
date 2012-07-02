@@ -13,6 +13,12 @@
         software.
     */
     
+    session_start();
+	if(session_is_registered(xi_username))
+	{
+	    header("location:login_success.php");
+	}
+
     include("themes/SMCHS/admin/header-top.php");
     echo "\n        <title>Administrator Login</title>\n";
     include("themes/SMCHS/admin/header-middle.php");

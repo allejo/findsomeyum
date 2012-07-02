@@ -15,6 +15,7 @@
     
     session_start();
     require_once("includes/mysql_connection.php");
+	require_once("includes/auxiliaryFunctions.php");
     
     if(!session_is_registered(xi_username)) //If the user is not logged in, make them login
     {
@@ -35,13 +36,19 @@
     $userToEdit = $_GET['userid'];
     $userToEdit = stripslashes($userToEdit);
     $userToEdit = mysqli_real_escape_string($dbc, $userToEdit);
-    
+    $nameQuery = "SELECT username FROM users WHERE user_id = '$userToEdit' LIMIT 1";
+	$runNameQuery = @mysqli_query($dbc, $nameQuery);
+	$row = mysqli_fetch_array($runNameQuery);
+
     if (isset($_POST['submitted']))
     {
+		$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'deleteUser', '$adminUserName', '$userIP', '$adminUserName deleted user account $row[0].')";
+        $run_query = @mysqli_query($dbc, $logQuery);
+	
         $deleteUserQuery = "DELETE FROM `users` WHERE `users`.`user_id` = '$userToEdit' LIMIT 1";
         $run_query = @mysqli_query($dbc, $deleteUserQuery);
         
-        echo "\n                User sucessfully deleted.
+        echo "\n                User successfully deleted.
             \n<br />
             \n<br />
             <a href=\"./users.php\">&lt; Go Back</a>";
@@ -56,7 +63,7 @@
         exit();
     }
 ?>
-                <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+                <p>Are you sure you want to delete <strong><?php echo $row[0]?></strong>? This action cannot be undone.</p>
                 <br />
                 <div align="center">
                     <form style="text-align:justify;" action="./deleteuser.php?userid=<?php echo $userToEdit; ?>" method="post">

@@ -16,6 +16,7 @@
     ob_start();
     
     require_once('mysql_connection.php');
+	require_once('auxiliaryFunctions.php');
     
     // Define $myusername and $mypassword 
     $myusername=$_POST['username']; 
@@ -28,13 +29,15 @@
     
     $sql = "SELECT * FROM users WHERE username='$myusername' AND pass=SHA1('$mypassword')";
     $result = @mysqli_query($dbc, $sql);
-    
-    // Mysql_num_row is counting table row
-    $count = mysqli_num_rows($result);
-    
+    $count = mysqli_num_rows($result); // Mysql_num_row is counting table row
+    $userIP = getUserIP();
+
     // If result matched $myusername and $mypassword, table row must be 1 row
     if($count == 1)
     {
+		$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'login', '$myusername', '$userIP', 'Administrative login successful.')";
+        $run_query = @mysqli_query($dbc, $logQuery);
+	
     	$row = mysqli_fetch_array($result);
         session_start();
         $_SESSION["xi_username"] = $myusername;
@@ -45,7 +48,9 @@
     }
     else
     {
-        echo "Wrong Username or Password";
+		$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'login', '$myusername', '$userIP', 'Failed login attempt.')";
+        $run_query = @mysqli_query($dbc, $logQuery);
+
         header("location:../login.php?login=false");
     }
     
