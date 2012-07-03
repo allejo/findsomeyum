@@ -3,13 +3,13 @@
         Copyright Sujevo Software, 2012. All Rights Reserved.
         http://sujevo.com
         
-        Usage of this system is allowed with expressed written
+        Usage of this software is allowed with expressed written
         permission of the owner. This source may not be modified
         or built upon without expressed written permission from
         the copyright holder.
         This software is provided "AS IS" and at no time is the
-        developer or distributed of this software is liable for
-        any damage caused with the use or misuse of the this
+        developer or distributor of this software liable for
+        any damage caused by the use or misuse of the this
         software.
     */
     
