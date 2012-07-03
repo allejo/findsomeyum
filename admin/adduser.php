@@ -158,10 +158,11 @@
         {
 			$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'addUser', '$adminUserName', '$userIP', '$adminUserName created new user account for $username.')";
 	        $run_query = @mysqli_query($dbc, $logQuery);
-	
+            
+            $password = encryptPassword($username, $password);
             //Create the query, execute it, and save the values returned into an array
-            $query = "INSERT INTO users (user_id, username, first_name, last_name, email, pass, registration_date, userType) VALUES (NULL, '$username', '$first_name', '$last_name', '$email', SHA1('$password'), NOW(), '$userType')";
-            $run_query = @mysqli_query($dbc, $query);
+            $query = "INSERT INTO users (user_id, username, first_name, last_name, email, pass, registration_date, userType) VALUES (NULL, '$username', '$first_name', '$last_name', '$email', '$password', NOW(), '$userType')";
+            $run_query = @mysqli_query($dbc, $query) OR die ("sql error" . mysqli_error($dbc));
             
             if ($run_query) //Hurray no errors!
             {

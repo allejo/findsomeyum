@@ -26,8 +26,9 @@
     $mypassword = stripslashes($mypassword);
     $myusername = mysqli_real_escape_string($dbc, $myusername);
     $mypassword = mysqli_real_escape_string($dbc, $mypassword);
+    $mypassword = encryptPassword($myusername, $mypassword);
     
-    $sql = "SELECT * FROM users WHERE username='$myusername' AND pass=SHA1('$mypassword')";
+    $sql = "SELECT * FROM users WHERE username='$myusername' AND pass='$mypassword'";
     $result = @mysqli_query($dbc, $sql);
     $count = mysqli_num_rows($result); // Mysql_num_row is counting table row
     $userIP = getUserIP();

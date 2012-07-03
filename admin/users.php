@@ -30,9 +30,30 @@
         exit(); //Kill the script to avoid malicious injections
     }
     
-    $getUserDatabase = "SELECT user_id, username, first_name, last_name, email, userType FROM users";
-    $result = @mysqli_query($dbc, $getUserDatabase);
+    if (isset($_GET['page']))
+    {
+        $pageno = $_GET['page'];
+    }
+    else
+    {
+        $pageno = 1;
+    }
+    
+    $query = "SELECT count(*) FROM users";
+    $result = mysqli_query($dbc, $query) or trigger_error("SQL", E_USER_ERROR);
+    $query_data = mysqli_fetch_row($result);
+    $numrows = $query_data[0];
+    $rows_per_page = 15;
+    $lastpage = ceil($numrows/$rows_per_page);
+    
+    $getUserDatabase = "SELECT user_id, username, first_name, last_name, email, userType FROM users ORDER BY user_id ASC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
+    $result = @mysqli_query($dbc, $getUserDatabase) OR die ("Error: " . mysqli_error($dbc));
     $numberOfRows = mysqli_num_rows($result);
+    
+    $pageno = (int)$pageno;
+    if ($pageno > $lastpage) { $pageno = $lastpage; }
+    if ($pageno < 1) { $pageno = 1; }
+    if ($lastpage == 0) { $lastpage += 1; }
     
     echo "                <table  width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\">
                     <tr>
@@ -60,8 +81,36 @@
                         <td><a href=\"deleteuser.php?userid=$row[0]\">Delete</a></td>
                     </tr>";
     }
-    echo "\n                </table>\n";
-    echo "            </div> <!-- End Main Column -->
+    echo "\n                </table>\n                <br />\n                <br />";
+    
+    echo "\n                <div align=\"center\">\n";
+    
+    if ($pageno == 1)
+    {
+       echo "                    &lt;&lt; &lt;";
+    }
+    else
+    {
+       echo "                    <a href='{$_SERVER['PHP_SELF']}?view={$_GET['view']}&page=1'>&lt;&lt;</a> ";
+       $prevpage = $pageno-1;
+       echo "\n                    <a href='{$_SERVER['PHP_SELF']}?view={$_GET['view']}&page=$prevpage'>&lt;</a> ";
+    }
+    
+    echo "\n                    ( Page $pageno of $lastpage )";
+    
+    if ($pageno == $lastpage)
+    {
+        echo "\n                    &gt; &gt;&gt; ";
+    }
+    else
+    {
+       $nextpage = $pageno+1;
+       echo "\n                     <a href='{$_SERVER['PHP_SELF']}?view={$_GET['view']}&page=$nextpage'>&gt;</a>\n";
+       echo "                     <a href='{$_SERVER['PHP_SELF']}?view={$_GET['view']}&page=$lastpage'>&gt;&gt;</a>\n";
+    }
+    
+    echo "                </div> <!-- End Pagination -->
+            </div> <!-- End Main Column -->
             
             <div id=\"sidebar\">\n";
     include("themes/admin/users-sidebar.php");

@@ -6,3 +6,14 @@ System dev :  "OR die ('sql error:' . mysqli_connect_error())"
 Input sanitation for all forums >.>
 
 or die("Error: ".mysqli_error($dbc));
+
+
+
+---
+<link rel="apple-touch-icon" href="/icons/buildinternet_iphone.png" /> 
+
+Android Square Icon: 56 x 56px,
+iPhone Square Icon: 57 x 57px, Both: 60 x 60px if icon is not square.
+
+
+http://detectmobilebrowsers.com/

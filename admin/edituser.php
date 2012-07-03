@@ -33,7 +33,8 @@
     echo"\n";
     echo "\n            <div id=\"main_column\">\n";
     
-    $userToEdit = $_GET['userid'];
+    $userToEdit = trim($_GET['userid');
+    $userToEdit = stripslashes($userToEdit);
     
     $getUserDatabase = "SELECT user_id, username, first_name, last_name, email, userType FROM users WHERE user_id = '" . $userToEdit . "'";
     $result = @mysqli_query($dbc, $getUserDatabase);
@@ -93,8 +94,8 @@
 	
             $newPassword = trim($_POST['newpassword']);
             $newPassword = stripslashes($newPassword);
-            $newPassword = sha1($newPassword);
-            $updatePasswordQuery = "UPDATE `smchs`.`users` SET  `pass` = '" . $newPassword . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            $newPassword = encryptPassword($row[1], $newPassword);
+            $updatePasswordQuery = "UPDATE users SET pass = '" . $newPassword . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updatePasswordQuery);
         }
         else if (empty($_POST['newpassword']) && empty($_POST['confirmnewpassword']))

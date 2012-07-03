@@ -32,6 +32,7 @@
     
     //Let's pull the information from the database
     require_once('includes/mysql_connection.php');
+    require_once('includes/auxiliaryFunctions.php');
     $myusername = $_SESSION['xi_username'];
     $sql = "SELECT * FROM users WHERE username='$myusername'";
     $result = @mysqli_query($dbc, $sql);
@@ -41,7 +42,7 @@
     {
         $errors = array(); // Initialize an error array.
         
-        if (sha1($_POST['currentpassword']) == $row[5]) //If the current password is correct
+        if (encryptPassword($_SESSION['xi_username'], $_POST['currentpassword']) == $row[5]) //If the current password is correct
         {
             if (!empty($_POST['first_name']) && $_POST['first_name'] != $row[2])
             {
@@ -76,9 +77,9 @@
                 $newPassword = $_POST['newpassword'];
                 $newPassword = stripslashes($newPassword);
                 $newPassword = mysqli_real_escape_string($dbc, $newPassword);
-                $newPassword = SHA1($newPassword);
+                $newPassword = encryptPassword($_SESSION['xi_username'], $newPassword);
                 
-                $updatePasswordQuery = "UPDATE `smchs`.`users` SET  `pass` = '" . $newPassword . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+                $updatePasswordQuery = "UPDATE users SET pass = '" . $newPassword . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
                 $result = @mysqli_query($dbc, $updatePasswordQuery);
             }
             else if (empty($_POST['newpassword']))
