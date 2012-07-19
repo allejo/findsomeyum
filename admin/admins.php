@@ -14,6 +14,12 @@
     */
     
     session_start();
+    
+    if(!session_is_registered(xi_username)) //The user is not logged in or got logged out due to inactivity
+    {
+        header("location:login.php"); //Send them to the login page
+    }
+    
     require_once('includes/mysql_connection.php');
     
     //Build the header and the navigation area
@@ -26,12 +32,7 @@
     include("themes/admin/header-end.php");
     echo"\n";
     echo "\n            <div id=\"main_column\">\n";
-    
-    if(!session_is_registered(xi_username)) //The user is not logged in or got logged out due to inactivity
-    {
-        header("location:login.php"); //Send them to the login page
-    }
-    
+        
     if ($_SESSION['xi_userType'] != 'admin' && $_SESSION['xi_userType'] != 'systemDev') //The user does not have the permission to add a new user
     {
     	echo '<h2>Permission Denied</h2>
@@ -51,14 +52,14 @@
         $pageno = 1;
     }
     
-    $query = "SELECT count(*) FROM members";
+    $query = "SELECT count(*) FROM admins";
     $result = mysqli_query($dbc, $query) OR die ("Error: " . mysqli_error($dbc));
     $query_data = mysqli_fetch_row($result);
     $numrows = $query_data[0];
     $rows_per_page = 15;
     $lastpage = ceil($numrows/$rows_per_page);
     
-    $getUserDatabase = "SELECT user_id, username, first_name, last_name, email, premium, registration_date FROM members ORDER BY user_id ASC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
+    $getUserDatabase = "SELECT user_id, username, first_name, last_name, email, userType FROM admins ORDER BY user_id ASC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
     $result = @mysqli_query($dbc, $getUserDatabase) OR die ("Error: " . mysqli_error($dbc));
     $numberOfRows = mysqli_num_rows($result);
     
@@ -71,11 +72,10 @@
                     <tr>
                         <td><strong>User ID</strong></td>
                         <td><strong>Username</strong></td>
-                        <td><strong>Premium</strong></td>
+                        <td><strong>User Type</strong></td>
                         <td><strong>First Name</strong></td>
                         <td><strong>Last Name</strong></td>
                         <td><strong>Email</strong></td>
-                        <td><strong>Date Registered</strong></td>
                         <td><strong>Edit</strong></td>
                         <td><strong>Delete</strong></td>
                     </tr>";
@@ -83,21 +83,15 @@
     for ($i = 0; $i < $numberOfRows; $i++)
     {
         $row = mysqli_fetch_array($result);
-        if ($row[5] == 0)
-            $premium = "No";
-        else
-            $premium = "Yes";
-            
         echo "\n                    <tr>
                         <td>$row[0]</td>
                         <td>$row[1]</td>
-                        <td>$premium</td>
+                        <td>$row[5]</td>
                         <td>$row[2]</td>
                         <td>$row[3]</td>
                         <td>$row[4]</td>
-                        <td>$row[6]</td>
-                        <td><a href=\"edituser.php?type=member&userid=$row[0]\">Edit</a></td>
-                        <td><a href=\"deleteuser.php?type=member&userid=$row[0]\">Delete</a></td>
+                        <td><a href=\"edituser.php?type=admin&userid=$row[0]\">Edit</a></td>
+                        <td><a href=\"deleteuser.php?type=admin&userid=$row[0]\">Delete</a></td>
                     </tr>";
     }
     echo "\n                </table>\n                <br />\n                <br />";
@@ -133,10 +127,6 @@
             
             <div id=\"sidebar\">\n";
     include("themes/admin/users-sidebar.php");
-    echo "            </div> <!-- End Sidebar -->\n\n";
-
-    include("themes/admin/footer.php");    
-?>ude("themes/admin/users-sidebar.php");
     echo "            </div> <!-- End Sidebar -->\n\n";
 
     include("themes/admin/footer.php");    

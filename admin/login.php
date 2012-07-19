@@ -44,16 +44,13 @@
                                     </tr>
                                     <tr>
                                         <td width="78">Username</td>
-                                        <td width="6">:</td>
-                                        <td width="294"><input name="username" type="text" id="myusername"></td>
+                                        <td width="294"><input name="username" type="text" id="myusername" value="<?php echo $_SESSION['ns_username']; ?>"></td>
                                     </tr>
                                     <tr>
                                         <td>Password</td>
-                                        <td>:</td>
                                         <td><input name="password" type="password" id="mypassword"></td>
                                     </tr>
                                     <tr>
-                                        <td>&nbsp;</td>
                                         <td>&nbsp;</td>
                                         <td><input type="submit" name="Submit" value="Login"></td>
                                     </tr>

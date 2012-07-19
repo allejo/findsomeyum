@@ -1,4 +1,4 @@
-<?php
+<?php 
     /*
         Copyright Sujevo Software, 2012. All Rights Reserved.
         http://sujevo.com
@@ -13,13 +13,12 @@
         software.
     */
     
-    // Set the database access information as constants:
-    DEFINE ('DB_USER', 'findsomeyum');
-    DEFINE ('DB_PASSWORD', 'xjWh0gpY5pVvgt');
-    DEFINE ('DB_HOST', '50.63.104.73');
-    DEFINE ('DB_NAME', 'findsomeyum');
-
-    // Make the connection:
-    global $dbc;
-    $dbc = @mysqli_connect (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME) OR die ('Could not connect to MySQL: ' . mysqli_connect_error() );
+    include("includes/header.php");
+    include("includes/menubar.php");
+?>
+            <div id="content">
+                <?php echo $row[2]; ?>
+            </div>
+<?php
+    include("includes/footer.php");
 ?>

@@ -34,7 +34,7 @@
     require_once('includes/mysql_connection.php');
     require_once('includes/auxiliaryFunctions.php');
     $myusername = $_SESSION['xi_username'];
-    $sql = "SELECT * FROM users WHERE username='$myusername'";
+    $sql = "SELECT * FROM admins WHERE username='$myusername'";
     $result = @mysqli_query($dbc, $sql);
     $row = mysqli_fetch_array($result);
     
@@ -50,7 +50,7 @@
                 $newFirstName = stripslashes($newFirstName);
                 $newFirstName = mysqli_real_escape_string($dbc, $newFirstName);
             
-                $updateFirstNameQuery = "UPDATE `smchs`.`users` SET `first_name` = '" . $newFirstName . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+                $updateFirstNameQuery = "UPDATE admins SET first_name = '" . $newFirstName . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
                 $result = @mysqli_query($dbc, $updateFirstNameQuery);
             }
             if (!empty($_POST['last_name']) && $_POST['last_name'] != $row[3])
@@ -59,7 +59,7 @@
                 $newLastName = stripslashes($newLastName);
                 $newLastName = mysqli_real_escape_string($dbc, $newLastName);
                 
-                $updateLastNameQuery = "UPDATE `smchs`.`users` SET  `last_name` = '" . $newLastName . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+                $updateLastNameQuery = "UPDATE admins SET  last_name = '" . $newLastName . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
                 $result = @mysqli_query($dbc, $updateLastNameQuery);
             }
             if (!empty($_POST['email']) && $_POST['email'] != $row[4])
@@ -68,7 +68,7 @@
                 $newEmail = stripslashes($newEmail);
                 $newEmail = mysqli_real_escape_string($dbc, $newEmail);
             
-                $updateEmailQuery = "UPDATE `smchs`.`users` SET  `email` = '" . $newEmail . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+                $updateEmailQuery = "UPDATE admmins SET  email = '" . $newEmail . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
                 $result = @mysqli_query($dbc, $updateEmailQuery);
             }
             
@@ -79,7 +79,7 @@
                 $newPassword = mysqli_real_escape_string($dbc, $newPassword);
                 $newPassword = encryptPassword($_SESSION['xi_username'], $newPassword);
                 
-                $updatePasswordQuery = "UPDATE users SET pass = '" . $newPassword . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
+                $updatePasswordQuery = "UPDATE admins SET pass = '" . $newPassword . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
                 $result = @mysqli_query($dbc, $updatePasswordQuery);
             }
             else if (empty($_POST['newpassword']))

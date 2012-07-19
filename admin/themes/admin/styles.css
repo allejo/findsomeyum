@@ -25,7 +25,7 @@ html, body
 	height: 100px;
 	padding: 30px 0px 0px 0px;
 	float: left;
-	background: #000033;
+	background: #003300;
 }
 
 h1
@@ -121,7 +121,7 @@ a
 
 #footer
 {
-	background: #000033;
+	background: #003300;
 	height: 80px;
 	clear: both;
 }

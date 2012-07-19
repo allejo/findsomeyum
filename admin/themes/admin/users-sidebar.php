@@ -22,6 +22,11 @@
     
     if ($_SESSION['xi_userType'] == 'admin' || $_SESSION['xi_userType'] == 'systemDev')
     {
-        echo "                <a href=\"./users.php\">User List</a><br />\n";
+        echo "                <a href=\"./admins.php\">Admin List</a><br />\n";
+    }
+    
+    if ($_SESSION['xi_userType'] == 'admin' || $_SESSION['xi_userType'] == 'systemDev')
+    {
+        echo "                <a href=\"./users.php\">Member List</a><br />\n";
     }
 ?>

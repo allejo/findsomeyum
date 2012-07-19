@@ -73,14 +73,27 @@
     }
     else
     {
-        $query = "SELECT count(*) FROM logs";
-        $result = mysqli_query($dbc, $query) OR die ("Error: " . mysqli_error($dbc));
-        $query_data = mysqli_fetch_row($result);
-        $numrows = $query_data[0];
-        $rows_per_page = 15;
-        $lastpage = ceil($numrows/$rows_per_page);
-        
-        $getLogDatabase = "SELECT * FROM logs ORDER BY time DESC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
+        if ($_SESSION['xi_userType'] == 'editor')
+        {
+            $query = "SELECT count(*) FROM logs WHERE actionType = 'editor'";
+            $result = mysqli_query($dbc, $query) OR die ("Error: " . mysqli_error($dbc));
+            $query_data = mysqli_fetch_row($result);
+            $numrows = $query_data[0];
+            $rows_per_page = 15;
+            $lastpage = ceil($numrows/$rows_per_page);
+            $getLogDatabase = "SELECT * FROM logs WHERE actionType = 'editor' ORDER BY time DESC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
+        }
+        else
+        {
+            $query = "SELECT count(*) FROM logs";
+            $result = mysqli_query($dbc, $query) OR die ("Error: " . mysqli_error($dbc));
+            $query_data = mysqli_fetch_row($result);
+            $numrows = $query_data[0];
+            $rows_per_page = 15;
+            $lastpage = ceil($numrows/$rows_per_page);
+            
+            $getLogDatabase = "SELECT * FROM logs ORDER BY time DESC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
+        }
     }
     
     

@@ -54,7 +54,7 @@
         $username = trim($_POST['username']);
         $username = stripslashes($username);
         $username = mysqli_real_escape_string($dbc, $username);
-        $checkUserNameQuery = "SELECT username FROM users WHERE username = '$username'";
+        $checkUserNameQuery = "SELECT username FROM admins WHERE username = '$username'";
         $result = @mysqli_query($dbc, $checkUserNameQuery);
         $row = mysqli_fetch_array($result);
         $count = mysqli_num_rows($result);
@@ -161,7 +161,7 @@
             
             $password = encryptPassword($username, $password);
             //Create the query, execute it, and save the values returned into an array
-            $query = "INSERT INTO users (user_id, username, first_name, last_name, email, pass, registration_date, userType) VALUES (NULL, '$username', '$first_name', '$last_name', '$email', '$password', NOW(), '$userType')";
+            $query = "INSERT INTO admin (user_id, username, first_name, last_name, email, pass, registration_date, userType) VALUES (NULL, '$username', '$first_name', '$last_name', '$email', '$password', NOW(), '$userType')";
             $run_query = @mysqli_query($dbc, $query) OR die ("sql error" . mysqli_error($dbc));
             
             if ($run_query) //Hurray no errors!

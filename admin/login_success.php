@@ -29,9 +29,9 @@
     include("themes/admin/header-end.php");
     echo"\n";
     
-    echo "\n            <h2>Login Sucessful</h2>
+    echo "\n            <h2>News</h2>
             <p>
-                Welcome back to XiON, {$_SESSION['xi_firstName']}. Please use the navigation bar above to select what part of the website you'd like to modify.
+                <font color=\"darkgreen\"><b>Database </b></font><font size=\"1\">by allejo (7/7/12)</font><br>We need data entered into the database. Get working...<br><br>
             </p>\n\n";
     
     include("themes/admin/footer.php");

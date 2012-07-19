@@ -33,10 +33,14 @@
     echo"\n";
     echo "\n            <div id=\"main_column\">\n";
     
-    $userToEdit = trim($_GET['userid');
+    $userType = $_GET['type'];
+    $userToEdit = trim($_GET['userid']);
     $userToEdit = stripslashes($userToEdit);
     
-    $getUserDatabase = "SELECT user_id, username, first_name, last_name, email, userType FROM users WHERE user_id = '" . $userToEdit . "'";
+    if ($userType == "admin")
+        $getUserDatabase = "SELECT user_id, username, first_name, last_name, email, userType FROM admins WHERE user_id = '" . $userToEdit . "'";
+    else
+        $getUserDatabase = "SELECT user_id, username, first_name, last_name, email, premium FROM members WHERE user_id = '" . $userToEdit . "'";
     $result = @mysqli_query($dbc, $getUserDatabase);
     $numberOfRows = mysqli_num_rows($result);
     $row = mysqli_fetch_array($result);
@@ -50,7 +54,11 @@
 	
             $newFirstName = trim($_POST['first_name']);
             $newFirstName = stripslashes($newFirstName);
-            $updateFirstNameQuery = "UPDATE `smchs`.`users` SET  `first_name` = '" . $newFirstName . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            
+            if ($userType == "admin")
+                $updateFirstNameQuery = "UPDATE admins SET  first_name = '" . $newFirstName . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
+            else
+                $updateFirstNameQuery = "UPDATE members SET  first_name = '" . $newFirstName . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updateFirstNameQuery);
         }
         
@@ -61,7 +69,11 @@
 	
             $newLastName = trim($_POST['last_name']);
             $newLastName = stripslashes($newLastName);
-            $updateLastNameQuery = "UPDATE `smchs`.`users` SET  `last_name` = '" . $newLastName . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            
+            if ($userType == "admin")
+                $updateLastNameQuery = "UPDATE admins SET  last_name = '" . $newLastName . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
+            else
+                $updateLastNameQuery = "UPDATE members SET  last_name = '" . $newLastName . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updateLastNameQuery);
         }
         
@@ -72,18 +84,22 @@
 	
             $newEmail = trim($_POST['email']);
             $newEmail = stripslashes($newEmail);
-            $updateEmailQuery = "UPDATE `smchs`.`users` SET  `email` = '" . $newEmail . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+            
+            if ($userType == "admin")
+                $updateEmailQuery = "UPDATE admins SET  email = '" . $newEmail . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
+            else
+                $updateEmailQuery = "UPDATE members SET  email = '" . $newEmail . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updateEmailQuery);
         }
         
-        if ($_POST['userType'] && $_POST['userType'] != $row[5])
+        if (isset($_POST['userType']) && $_POST['userType'] != $row[5] && $userType == "admin")
         {
 			$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'editUser', '$adminUserName', '$userIP', '$adminUserName edited $row[1]\'s user type.')";
 	        $run_query = @mysqli_query($dbc, $logQuery);
 	
             $newUserType = trim($_POST['userType']);
             $newUserType = stripslashes($newUserType);
-	        $updateEmailQuery = "UPDATE `smchs`.`users` SET  `userType` = '" . $newUserType . "' WHERE `users`.`user_id` = '" . $row[0] . "' LIMIT 1";
+	        $updateEmailQuery = "UPDATE admins SET  userType = '" . $newUserType . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updateEmailQuery);
         }
         
@@ -95,7 +111,11 @@
             $newPassword = trim($_POST['newpassword']);
             $newPassword = stripslashes($newPassword);
             $newPassword = encryptPassword($row[1], $newPassword);
-            $updatePasswordQuery = "UPDATE users SET pass = '" . $newPassword . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
+            
+            if ($userType == "admin")
+                $updatePasswordQuery = "UPDATE admins SET pass = '" . $newPassword . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
+            else
+                $updatePasswordQuery = "UPDATE members SET pass = '" . $newPassword . "' WHERE user_id = '" . $row[0] . "' LIMIT 1";
             $result = @mysqli_query($dbc, $updatePasswordQuery);
         }
         else if (empty($_POST['newpassword']) && empty($_POST['confirmnewpassword']))
@@ -110,7 +130,7 @@
         echo "\n                User information successfully updated.
             \n<br />
             \n<br />
-            <a href=\"./edituser.php?userid=$userToEdit\">&lt; Go Back</a>
+            <a href=\"./edituser.php?type=$userType&userid=$userToEdit\">&lt; Go Back</a>
             \n        </div> <!-- End Main Column -->
                 
                 <div id=\"sidebar\">\n";
@@ -120,9 +140,26 @@
         include("themes/admin/footer.php");
         exit();
     }
+    
+    if ($row[5] == "systemDev" && $_SESSION['xi_userType'] != 'systemDev')
+    {
+        echo "\n                Permission Denied.
+            \n<br />
+            \n<br />
+            <a href=\"./admins.php\">&lt; Go Back</a>
+            \n        </div> <!-- End Main Column -->
+                
+                <div id=\"sidebar\">\n";
+                
+        include("themes/admin/users-sidebar.php");
+        echo "            </div> <!-- End Sidebar -->\n\n";
+
+        include("themes/admin/footer.php");
+        exit();
+    }
 ?>
                 <h2>User Profile</h2>
-                <form style="text-align:justify;" action="./edituser.php?userid=<?php echo $_GET['userid']; ?>" method="post">
+                <form style="text-align:justify;" action="./edituser.php?type=<?php echo $_GET['type']; ?>&userid=<?php echo $_GET['userid']; ?>" method="post">
                     <table width="100%" border="0" cellpadding="3" cellspacing="1">
                         <tr>
                             <td width="200">Username</td>
@@ -140,33 +177,36 @@
                             <td width="200">Email Address</td>
                             <td width="200"><input type="text" name="email" size="22" maxlength="40" value="<?php echo $row[4]; ?>" /></td>
                         </tr>
-                        <tr>
-                            <td width="200">User Type</td>
-                            <td width="200">
-                                <select name="userType">
-                                    <?php
-                                        if ($row[5] == "admin")
-                                        {
-                                            echo "<option value=\"admin\">Adminstrator</option>\n";
-                                            echo "                                    <option value=\"editor\">Editor</option>\n";
-                                            echo "                                    <option value=\"systemDev\">System Developer</option>\n";
-                                        }
-                                        else if ($row[5] == "editor")
-                                        {
-                                            echo "<option value=\"editor\">Editor</option>\n";
-                                            echo "                                    <option value=\"admin\">Administrator</option>\n";
-                                            echo "                                    <option value=\"systemDev\">System Developer</option>\n";
-                                        }
-                                        else if ($row[5] == "systemDev")
-                                        {
-                                            echo "<option value=\"systemDev\">System Developer</option>\n";
-                                            echo "                                    <option value=\"admin\">Administrator</option>\n";
-                                            echo "                                    <option value=\"editor\">Editor</option>\n";
-                                        }
-                                    ?>
-                                </select>
-                            </td>
-                        </tr>
+                        <?php
+                            if ($_SESSION['xi_userType'] == 'systemDev' && $userType == "admin")
+                            {
+                                echo "<tr>
+                                        <td width=\"200\">User Type</td>
+                                        <td width=\"200\">
+                                            <select name=\"userType\">";
+                                                if ($row[5] == "admin")
+                                                {
+                                                    echo "<option value=\"admin\">Adminstrator</option>\n";
+                                                    echo "                                    <option value=\"editor\">Editor</option>\n";
+                                                    echo "                                    <option value=\"systemDev\">System Developer</option>\n";
+                                                }
+                                                else if ($row[5] == "editor")
+                                                {
+                                                    echo "<option value=\"editor\">Editor</option>\n";
+                                                    echo "                                    <option value=\"admin\">Administrator</option>\n";
+                                                    echo "                                    <option value=\"systemDev\">System Developer</option>\n";
+                                                }
+                                                else if ($row[5] == "systemDev")
+                                                {
+                                                    echo "<option value=\"systemDev\">System Developer</option>\n";
+                                                    echo "                                    <option value=\"admin\">Administrator</option>\n";
+                                                    echo "                                    <option value=\"editor\">Editor</option>\n";
+                                                }
+                                echo "            </select>
+                                        </td>
+                                    </tr>";
+                            }
+                        ?>
                     </table>
                     <br />
                     <hr />
