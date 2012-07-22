@@ -13,14 +13,33 @@
         software.
     */
     
+    require_once('admin/includes/mysql_connection.php');
     require_once('admin/includes/auxiliaryFunctions.php');
     
     if (isset($_GET['view']))
     {
-        require_once('admin/includes/mysql_connection.php');
         $blogPost = stripslashes($_GET['view']);
         $blogPost = mysqli_real_escape_string($dbc, $blogPost);
         
+        if(isset($_POST['submitted']))
+        {
+            if (isset($_GET['action']))
+            {
+                if ($_GET['action'] == "comment")
+                {
+                    $comment = $_POST['comment'];
+                    $comment = stripslashes($comment);
+                    $comment = mysqli_real_escape_string($dbc, $comment);
+                    $user_id = XiON_getUserIDFromUsername($dbc, XiON_getUsernameFromSession());
+
+                    $addNewCommentQuery = "INSERT INTO comments (post_section, parent_post, user_id, content, date_posted, date_edited) VALUES ('blog', '$blogPost', '$user_id', '$comment', NOW(), NOW())";
+                    $addNewComment = @mysqli_query($dbc, $addNewCommentQuery) OR die ("Error: " . mysqli_error($dbc));
+
+                    header("location: blog.php?view=" . $blogPost);
+                }
+            }
+        }
+
         $getBlogPostQuery = "SELECT * FROM blog WHERE blog_id='" . $blogPost . "'";
         $blogPostResult = @mysqli_query($dbc, $getBlogPostQuery);
         $blogPostData = mysqli_fetch_array($blogPostResult);
@@ -44,8 +63,34 @@
             <h2>$blogPostData[2]</h2>
                             by <strong><a href=\"./profile.php?user=$myUsername[0]\" style=\"color: $userColor[1]\">$myUsername[2]</a></strong><br /><br />
                             $blogPostData[3]<br />
-                            <span class=\"category\">Category: $blogPostData[4]</span></div></div>";
+                            <span class=\"category\">Category: $blogPostData[4]</span></div>";
+            if(session_is_registered(ns_username))
+            {
+                echo "<br /><h3>Comments</h3>
+                <form method=\"POST\" action=\"" . $_SERVER['REQUEST_URI'] . "&action=comment\"><br />
+                <textarea id=\"command\" name=\"comment\" rows=\"10\" cols=\"80\" /></textarea><br /><br />
+                <input type=\"hidden\" name=\"submitted\" value=\"TRUE\" />
+                <input type=\"submit\" value=\"Comment\" />
+                </form><br /><br />";
+            }
+            else
+            {
+                echo "<br /><div class=\"login\">Please <a href=\"#login-box\" class=\"download_button orange links login-window\">login</a> or <a href=\"#register-box\" class=\"download_button orange links login-window\">register</a> to comment.</div><br /><br />";
+            }
             
+            echo "\n<!-- Start printing out comments -->\n";
+
+            if (XiON_getCommentsCount($dbc, "blog", $blogPost) != 0)
+            {
+                echo XiON_getComments($dbc, "blog", $blogPost);
+            }
+            else
+            {
+                echo "<em>No Comments</em>";
+            }
+            
+            echo "</div>";
+
             include("includes/footer.php");
             exit();
         }

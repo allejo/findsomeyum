@@ -62,7 +62,7 @@
         $getUserIDResult =  @mysqli_query($dbc, $getUserIDQuery);
         $getUserID = mysqli_fetch_array($getUserIDResult);
 
-        $addRecipeQuery = "INSERT INTO recipes (post_id, user_id, category, title, youtube, images, difficulty, prep_time, cook_time, description, ingredients, directions, notes, rating, date_posted, date_edited, ipAddress) VALUES (NULL, '$getUserID[0]', '$category', '$title', '$youtube', '$image', '$difficulty', '$prep_time', '$cook_time', '$description', '$ingredients', '$directions', '$notes', 0.0, NOW(), NOW(), '$userIP')";
+        $addRecipeQuery = "INSERT INTO recipes (post_id, user_id, category, title, youtube, images, difficulty, prep_time, cook_time, description, ingredients, directions, notes, date_posted, date_edited, ipAddress) VALUES (NULL, '$getUserID[0]', '$category', '$title', '$youtube', '$image', '$difficulty', '$prep_time', '$cook_time', '$description', '$ingredients', '$directions', '$notes', NOW(), NOW(), '$userIP')";
         $addRecipeResult = @mysqli_query($dbc, $addRecipeQuery) OR die ("Line 1 Error: " . mysqli_error($dbc));
         $getLastInsertedRow = "SELECT post_id FROM recipes ORDER BY post_id DESC LIMIT 1";
         $getLastInsertedRowResult = @mysqli_query($dbc, $getLastInsertedRow) OR die ("Error: " . mysqli_error($dbc));
@@ -76,7 +76,7 @@
         else
         {
             //TODO Actually do something here!
-            echo "SOMETHING FUCKING WENT WRONG!";
+            echo "SOMETHING WENT WRONG!";
         }
     }
 
@@ -88,26 +88,26 @@
     <form method="post" action="newrecipe.php">
         <select name="category">
             <option value="">Select Category</option>
-            <option value="appetizers">Appetizers</option>
-            <option value="breakfast">Breakfast</option>
-            <option value="dessert">Dessert</option>
-            <option value="drinks">Drinks</option>
-            <option value="main_dish">Main Dish</option>
-            <option value="salad">Salad</option>
-            <option value="side_dish">Side Dish</option>
-            <option value="soup">Soup</option>
+            <option value="Appetizers">Appetizers</option>
+            <option value="Breakfast">Breakfast</option>
+            <option value="Dessert">Dessert</option>
+            <option value="Drinks">Drinks</option>
+            <option value="Main Dish">Main Dish</option>
+            <option value="Salad">Salad</option>
+            <option value="Side Dish">Side Dish</option>
+            <option value="Soup">Soup</option>
         </select>
         <select name="difficulty">
             <option value="">Select Difficulty</option>
-            <option value="easy">Easy</option>
-            <option value="medium">Medium</option>
-            <option value="difficult">Difficult</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Difficult">Difficult</option>
         </select>
         <br />
         <br />
         Title <input class="input" name="title" type="text" id="title" placeholder="Title" width="100%" /><br />
         Image <input class="input" name="image" type="text" id="image" placeholder="Image URL" /><br />
-        YouTube <input class="input" name="youtube" type="text" id="youtube" placeholder="YouTube URL" /><br />
+        http://www.youtube.com/watch?v=<input class="input" name="youtube" type="text" id="youtube" placeholder="YouTube URL" /><br />
         Prep Time <input name="prep_time" type="text" id="prep_time" placeholder="Prep Time (Minutes)" />
         Cook Time <input name="cook_time" type="text" id="cook_time" placeholder="Cook Time (Minutes)" /><br /><br />
         Description<br /><textarea name="description" rows="10" cols="80" /></textarea><br /><br />

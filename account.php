@@ -106,6 +106,7 @@
         }
     }
 ?>
+                <div id="content">
                 <h2>User Profile</h2>
                 <br />
                 <p>
@@ -156,42 +157,6 @@
                     <br />
                     <hr />
                     <br />
-                    <table width="100%" border="0" cellpadding="3" cellspacing="1">
-                        <tr>
-                            <td width="200">Member Status</td>
-                            <?php
-                                $userStatusSQL = "SELECT premium FROM members WHERE username='$myusername'";
-                                $userStatusResult = @mysqli_query($dbc, $userStatusSQL);
-                                $premium = mysqli_fetch_array($userStatusResult);
-                                
-                                if ($premium[0] == 1)
-                                {
-                                    echo "<td width=\"200\">
-                                    <A HREF=\"https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=CRQXCBRNMALG6\">
-                                        <IMG SRC=\"https://www.paypalobjects.com/en_US/i/btn/btn_unsubscribe_LG.gif\" BORDER=\"0\">
-                                    </A>
-                                <strong>Premium User</strong>
-                                <h5>Thank you for supporting Natural Savings!</h5>
-                            </td>\n";
-                                }
-                                else
-                                {
-                                    echo "<td width=\"200\">
-                                    <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\">
-                                        <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\">
-                                        <input type=\"hidden\" name=\"hosted_button_id\" value=\"MC5N532BXKZSG\">
-                                        <input type=\"image\" src=\"https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay online!\">
-                                        <img alt=\"\" border=\"0\" src=\"https://www.paypalobjects.com/en_US/i/scr/pixel.gif\" width=\"1\" height=\"1\">
-                                    </form>
-                                <br />
-                                <strong>Free User</strong>
-                                <h5>As a free user, advertisements will be displayed and you may only have up to 10 items in your grocery list. With a one time payment of &#36;1 and all restrictions will be removed.</h5>
-                            </td>\n";
-                                }
-                                
-                            ?>
-                        </tr>
-                    </table>
                     <br />
                     <br />
                     <table width="100%" border="0" cellpadding="3" cellspacing="1">
@@ -203,6 +168,7 @@
                         </tr>
                     </table>
                 </form>
+            </div>
 <?php
     include("includes/footer.php");
 ?>

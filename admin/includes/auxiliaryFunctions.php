@@ -228,11 +228,168 @@
 	    
 	    if ($hyperlink == 1)
 	    {
-	    	return "<a href=\"profile.php?user=" . $XiON_userIDFromUsername . "\" style=\"color: " . $userTypeColor[1] . "\">" . $username . "</a>";
+	    	return "<a href=\"profile.php?user=" . XiON_getUserIDFromUsername($mysql_connection, $username) . "\" style=\"color: " . $userTypeColor[1] . "; text-decoration: none; font-weight: bold\">" . $username . "</a>";
 	    }
 	    else
 	    {
 	    	return "<span style=\"color: " . $userTypeColor . "\">" . $username . "</span>";
 	    }
+    }
+
+    /* =============================================
+    
+        XiON_getStarRating($rating)
+        
+        values
+            $rating - (integer) the id of the recipe we're going to get the
+                         star rating for
+        description
+            return the amount of stars that the recipe has recieved from users
+            
+    */
+
+    function XiON_getStarRating($mysql_connection, $rating)
+    {
+        $fullStars = round($rating);
+        $halfStars = $rating - $fullStars;
+        if ($halfStars > 0)
+        {
+            $emptyStars = 4 - $fullStars;
+        }
+        else
+        {
+            $emptyStars = 5 - $fullStars;
+        }
+        
+        $starRating = "";
+
+        for ($s = 0; $s < $fullStars; $s++)
+        {
+            $starRating .= "<img src=\"./imgs/star_s.png\" />";
+        }
+        if ($halfStars > 0)
+        {
+            $starRating .= "<img src=\"./imgs/star_s_half.png\" />";
+        }
+        for ($s = 0; $s < $emptyStars; $s++)
+        {
+            $starRating .= "<img src=\"./imgs/star_s_empty.png\" />";
+        }
+
+        return $starRating;
+    }
+
+    /* =============================================
+    
+        XiON_getRating($mysql_connection, $recipeID)
+        
+        values
+            $mysql_connection - (mysql_connect) the connectiong to the database
+            $recipeID - (integer) the id of the recipe
+        description
+            returns the average rating of a recipe post
+            
+    */
+
+    function XiON_getRating($mysql_connection, $recipeID)
+    {
+        $getRatingsQuery = "SELECT * FROM ratings WHERE recipe_id = '" . $recipeID . "'";
+        $getRatingResults = @mysqli_query($mysql_connection, $getRatingsQuery) OR die ("Error: " . mysqli_error($mysql_connection));
+        $getRatingsCount = mysqli_num_rows($getRatingResults);
+        
+        $totalRatings = 0;
+
+        //Let's do some math... the joy
+        for ($i = 0; $i < $getRatingsCount; $i++)
+        {
+            $rowValue = mysqli_fetch_array($getRatingResults);
+            $totalRatings += $rowValue['value'];
+        }
+        if ($getRatingsCount == 0)
+        {
+            $totalAverage = 0.00;
+        }
+        else
+        {
+            $totalAverage = $totalRatings / $getRatingsCount;
+            $totalAverage = round($totalAverage, 2);
+        }
+
+        return $totalAverage;
+    }
+
+    /* =============================================
+    
+        XiON_getRatingCount($mysql_connection, $recipeID)
+        
+        values
+            $mysql_connection - (mysql_connect) the connectiong to the database
+            $recipeID - (integer) the id of the recipe
+        description
+            returns out the number of votes
+            
+    */
+
+    function XiON_getRatingsCount($mysql_connection, $recipeID)
+    {
+        $getRatingsQuery = "SELECT * FROM ratings WHERE recipe_id = '" . $recipeID . "'";
+        $getRatingResults = @mysqli_query($mysql_connection, $getRatingsQuery) OR die ("Error: " . mysqli_error($mysql_connection));
+        $getRatingsCount = mysqli_num_rows($getRatingResults);
+        
+        return $getRatingsCount;
+    }
+
+    /* =============================================
+    
+        XiON_getComments($mysql_connection, ($postSection, $parentPost)
+        
+        values
+            $mysql_connection - (mysql_connect) the connectiong to the database
+            $postSection - (string) either blog or recipe
+            $parentPost - (integer) the blog or recipe id
+        description
+            prints out all the comments for a blog or recipe post
+            
+    */
+
+    function XiON_getComments($mysql_connection, $postSection, $parentPost)
+    {
+        $getcommentsQuery = "SELECT * FROM comments WHERE comments.parent_post = '" . $parentPost . "' AND comments.post_section = '" . $postSection . "' ORDER BY date_posted ASC";
+        $getCommentsResult = @mysqli_query($mysql_connection, $getcommentsQuery) OR die ("<br />Error: " . mysqli_error($mysql_connection));
+        $getCommentsCount = mysqli_num_rows($getCommentsResult);
+
+        for ($i = 0; $i < $getCommentsCount; $i++)
+        {
+            $getComments = mysqli_fetch_array($getCommentsResult);
+            echo "<small>by " . XiON_getUserProfileStylized($mysql_connection, XiON_getUsernameFromID($mysql_connection, $getComments['user_id']), 1) . "</small><br />" . $getComments['content'] . "<br /><br />
+            <small><em>posted on " . $getComments['date_posted'] . "</em></small><br /><br />";
+
+            if ($i + 1 != $getCommentsCount)
+            {
+                echo "<hr /><br />";
+            }
+        }
+    }
+
+    /* =============================================
+    
+        XiON_getCommentsCount($mysql_connection, ($postSection, $parentPost)
+        
+        values
+            $mysql_connection - (mysql_connect) the connectiong to the database
+            $postSection - (string) either blog or recipe
+            $parentPost - (integer) the blog or recipe id
+        description
+            prints out all the comments for a blog or recipe post
+            
+    */
+
+    function XiON_getCommentsCount($mysql_connection, $postSection, $parentPost)
+    {
+        $getcommentsQuery = "SELECT * FROM comments WHERE comments.parent_post = '" . $parentPost . "' AND comments.post_section = '" . $postSection . "' ORDER BY date_posted ASC";
+        $getCommentsResult = @mysqli_query($mysql_connection, $getcommentsQuery) OR die ("<br />Error: " . mysqli_error($mysql_connection));
+        $getCommentsCount = mysqli_num_rows($getCommentsResult);
+
+        return $getCommentsCount;
     }
 ?>

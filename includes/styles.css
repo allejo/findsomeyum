@@ -3,7 +3,7 @@
     http: //sujevo.com
 
     This styles sheet was made for exclusive use for Find Some
-    Yum only. Written by Vladimir Jimenez.
+    Yum only. Written by Vladimir Jimenez. Appreciated by David Xiao.
 */
 
 html, body
@@ -88,6 +88,11 @@ input, textarea
     color: #fdb913;
 }
 
+#topMenuBar a:hover
+{
+    color: #fdb913;
+}
+
 #featured
 {
     color: white;
@@ -124,7 +129,7 @@ input, textarea
 
 #featured .description .recipeBtn
 {
-    padding: 20px;
+    padding: 5px;
     float: right;
 }
 
@@ -211,7 +216,8 @@ input, textarea
 #content .viewrecipe .category
 {
     color: black;
-    font-size: 27px;
+    font-size: 15px;
+    font-style: italic;
 }
 
 #content .viewrecipe .title
@@ -219,6 +225,40 @@ input, textarea
     color: #fdb913;
     font-size: 27px;
     font-weight: bold;
+}
+
+#content .viewrecipe .author
+{
+	/*Just in case*/
+}
+
+#content .viewrecipe .image
+{
+	/*Just in case*/
+}
+
+#content .viewrecipe .login a
+{
+    color: white;
+    padding: 5px 10px;
+}
+
+#content .viewrecipe .rating img, #content .viewrecipe .rating small, #content .viewrecipe .rating span
+{
+	display: block;
+	line-height: 20px;
+	height: 20px;
+	float: left;
+}
+
+#giveRating
+{
+	display: inline-block;
+}
+
+#star1, #star2, #star3, #star4, #star5
+{
+    background: url("../imgs/star_m_empty.png");
 }
 
 #footer

@@ -25,7 +25,8 @@
     
     if (!session_is_registered(ns_username))
     {
-        echo "<a href=\"#login-box\" class=\"links login-window\">Log In</a>";
+        echo "<a href=\"#register-box\" class=\"links login-window\" style=\"color: yellow;\">Register</a>";
+        echo "<a href=\"#login-box\" class=\"links login-window\" style=\"color: yellow;\">Log In</a>";
     }
     else
     {

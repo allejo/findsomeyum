@@ -47,38 +47,112 @@
     </head>
     
     <script>
-        $(document).ready(function() {
-        	$('a.login-window').click(function() {
-        		
-                        //Getting the variable's value from a link 
-        		var loginBox = $(this).attr('href');
-        
-        		//Fade in the Popup
-        		$(loginBox).fadeIn(300);
-        		
-        		//Set the center alignment padding + border see css style
-        		var popMargTop = ($(loginBox).height() + 24) / 2; 
-        		var popMargLeft = ($(loginBox).width() + 24) / 2; 
-        		
-        		$(loginBox).css({ 
-        			'margin-top' : -popMargTop,
-        			'margin-left' : -popMargLeft
-        		});
-        		
-        		// Add the mask to body
-        		$('body').append('<div id="mask"></div>');
-        		$('#mask').fadeIn(300);
-        		
-        		return false;
-        	});
-        	
-        	// When clicking on the button close or the mask layer the popup closed
-        	$('a.close, #mask').live('click', function() { 
-        	  $('#mask , .login-popup').fadeOut(300 , function() {
-        		$('#mask').remove();  
-        	}); 
-        	return false;
-        	});
+        $(document).ready(function()
+        {
+            $('a.login-window').click(function()
+            {
+                //Getting the variable's value from a link 
+                var loginBox = $(this).attr('href');
+                
+                //Fade in the Popup
+                $(loginBox).fadeIn(300);
+                
+                //Set the center alignment padding + border see css style
+                var popMargTop = ($(loginBox).height() + 24) / 2; 
+                var popMargLeft = ($(loginBox).width() + 24) / 2; 
+                
+                $(loginBox).css({ 
+                    'margin-top' : -popMargTop,
+                    'margin-left' : -popMargLeft
+                });
+                
+                // Add the mask to body
+                $('body').append('<div id="mask"></div>');
+                $('#mask').fadeIn(300);
+                
+                return false;
+            });
+            
+            // When clicking on the button close or the mask layer the popup closed
+            $('a.close, #mask').live('click', function()
+            { 
+                $('#mask , .login-popup').fadeOut(300 , function()
+                {
+                    $('#mask').remove();  
+                }); 
+            
+                return false;
+            });
+            
+            // star 1
+            $('#star1').mouseover(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m.png")');
+            });
+            $('#star1').mouseout(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
+            });
+            
+            // star 2
+            $('#star2').mouseover(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m.png")');
+                $('#star2').css('background', 'url("imgs/star_m.png")');
+            });
+            $('#star2').mouseout(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star2').css('background', 'url("imgs/star_m_empty.png")');
+            });
+            
+            // star 3
+            $('#star3').mouseover(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m.png")');
+                $('#star2').css('background', 'url("imgs/star_m.png")');
+                $('#star3').css('background', 'url("imgs/star_m.png")');
+            });
+            $('#star3').mouseout(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star2').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star3').css('background', 'url("imgs/star_m_empty.png")');
+            });
+            
+            // star 4
+            $('#star4').mouseover(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m.png")');
+                $('#star2').css('background', 'url("imgs/star_m.png")');
+                $('#star3').css('background', 'url("imgs/star_m.png")');
+                $('#star4').css('background', 'url("imgs/star_m.png")');
+            });
+            $('#star4').mouseout(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star2').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star3').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star4').css('background', 'url("imgs/star_m_empty.png")');
+            });
+            
+            // star 5
+            $('#star5').mouseover(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m.png")');
+                $('#star2').css('background', 'url("imgs/star_m.png")');
+                $('#star3').css('background', 'url("imgs/star_m.png")');
+                $('#star4').css('background', 'url("imgs/star_m.png")');
+                $('#star5').css('background', 'url("imgs/star_m.png")');
+            });
+            $('#star5').mouseout(function()
+            {
+                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star2').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star3').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star4').css('background', 'url("imgs/star_m_empty.png")');
+                $('#star5').css('background', 'url("imgs/star_m_empty.png")');
+            });
         });
     </script>
     
@@ -101,9 +175,10 @@
         {
     ?>
         <div id="login-box" class="login-popup">
+            <a href="#" class="close"><img src="imgs/close_pop.png" style="margin-left: 200px" class="btn_close" title="Close Window" alt="Close" /></a>
             <form method="post" class="signin" action="includes/checklogin.php">
                 <fieldset class="textbox">
-                	<label class="username">
+                    <label class="username">
                         <span>Username</span>
                         <input name="username" type="text" id="myusername" autocomplete="on" placeholder="Username">
                     </label>
@@ -111,7 +186,33 @@
                         <span>Password</span>
                         <input name="password" type="password" id="mypassword" placeholder="Password">
                     </label>
+                    <br />
                     <input type="submit" name="Submit" value="Login">
+                </fieldset>
+            </form>
+        </div>
+        <div id="register-box" class="login-popup">
+            <a href="#" class="close"><img src="imgs/close_pop.png" style="margin-left: 200px" class="btn_close" title="Close Window" alt="Close" /></a>
+            <form method="post" class="signin" action="includes/checklogin.php">
+                <fieldset class="textbox">
+                    <label class="username">
+                        <span>Username</span>
+                        <input name="username" type="text" id="myusername" autocomplete="on" placeholder="Username">
+                    </label>
+                    <label class="email">
+                        <span>Email</span>
+                        <input name="email" type="text" id="myemail" autocomplete="on" placeholder="Email">
+                    </label>
+                    <label class="password">
+                        <span>Password</span>
+                        <input name="password" type="password" id="mypassword" placeholder="Password">
+                    </label>
+                    <label class="password">
+                        <span>Confirm Password</span>
+                        <input name="cpassword" type="password" id="mycpassword" placeholder="Confirm Password">
+                    </label>
+                    <br />
+                    <input type="submit" name="Submit" value="Register">
                 </fieldset>
             </form>
         </div>

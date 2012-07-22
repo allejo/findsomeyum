@@ -14,6 +14,11 @@
     */
     session_start();
     
+    if (!session_is_registered(ns_username))
+    {
+        header ("location: login.php");
+    }
+
     require_once('admin/includes/mysql_connection.php');
     include("includes/header.php");
     include("includes/menubar.php");
@@ -47,7 +52,9 @@
     if ($pageno < 1) { $pageno = 1; }
     if ($lastpage == 0) { $lastpage += 1; }
     
-    echo "                <table  width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"10\">
+    echo "<div id=\"content\">
+    <div class=\"viewrecipe\">
+                    <table  width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"10\">
                     <tr>
                         <td><strong>Recipes</strong></td>
                         <td><strong></strong></td>
@@ -58,7 +65,7 @@
     {
         $row = mysqli_fetch_array($myRecipesResult);
         echo "\n                    <tr>
-                        <td><strong>$row[3]</strong> ($row[13])</td>
+                        <td><div class=\"rating\"><span>$row[3]</span> " . XiON_getStarRating($dbc, XiON_getRating($dbc, $row['post_id'])) . "</td></div>
                         <td><a href=\"myrecipes.php?action=edit&recipeid=$row[0]\">Edit</a></td>
                         <td><a href=\"myrecipes.php?action=delete&recipeid=$row[0]\">Delete</a></td>
                     </tr>";
@@ -90,6 +97,8 @@
        echo "\n                     <a href='{$_SERVER['PHP_SELF']}?view={$_GET['view']}&page=$nextpage'>&gt;</a>\n";
        echo "                     <a href='{$_SERVER['PHP_SELF']}?view={$_GET['view']}&page=$lastpage'>&gt;&gt;</a>\n";
     }
+
+    echo "</div></div></div>";
 
     include("includes/footer.php");
 ?>

@@ -4,8 +4,7 @@
 */
 
 /* Mask for background, by default is not display */
-#mask
-{
+#mask {
 	display: none;
 	background: #000; 
 	position: fixed; left: 0; top: 0; 
@@ -16,10 +15,9 @@
 }
 
 /* You can customize to your needs  */
-.login-popup
-{
+.login-popup{
 	display:none;
-	background: #5F5F5F;
+	background: #333;
 	padding: 10px; 	
 	border: 2px solid #ddd;
 	float: left;
@@ -37,7 +35,7 @@
 
 img.btn_close { Position the close button
 	float: right; 
-	margin: -28px -28px 0 0;
+	margin: -28px -28px 0px 0px;
 }
 
 fieldset { 

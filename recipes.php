@@ -34,7 +34,7 @@
     $rows_per_page = 15;
     $lastpage = ceil($numrows/$rows_per_page);
 
-    $myRecipesQuery = "SELECT * FROM recipes ORDER BY title ASC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
+    $myRecipesQuery = "SELECT * FROM recipes ORDER BY date_posted DESC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
     $myRecipesResult = @mysqli_query($dbc, $myRecipesQuery) OR die ("Error: " . mysqli_error($dbc));
     $numberOfRows = mysqli_num_rows($myRecipesResult);
 
@@ -49,51 +49,25 @@
     {
         echo "<a href=\"./newrecipe.php\" style=\"padding: 10px\" class=\"download_button orange\">Post New Recipe</a><br /><br />";
     }
-
-    echo "                <table  width=\"100%\" border=\"0\" cellpadding=\"5\" cellspacing=\"1\">";
     
     for ($i = 0; $i < $numberOfRows; $i++)
     {
         $row = mysqli_fetch_array($myRecipesResult);
 
-        $usernameQuery = "SELECT username FROM members WHERE members.user_id = '" . $row[1] . "' LIMIT 1";
-        $userNameResult = @mysqli_query($dbc, $usernameQuery);
-        $myUsername = mysqli_fetch_array($userNameResult);
-        //3.4
-        $fullStars = round($row[13]); //3
-        $halfStars = $row[13] - $fullStars;
-        if ($halfStars > 0)
-        {
-            $emptyStars = 4 - $fullStars;
-        }
-        else
-        {
-            $emptyStars = 5 - $fullStars;
-        }
+        echo "\n                    <h2><a href=\"viewrecipe.php?recipeid=$row[0]\">$row[3]</a>";
+        echo XiON_getStarRating($dbc, XiON_getRating($dbc, $row['post_id']));
         
-        echo "\n                    <tr>
-                        <td>
-                            <h2><a href=\"viewrecipe.php?recipeid=$row[0]\">$row[3]</a>";
-        for ($s = 0; $s < $fullStars; $s++)
-        {
-            echo "<img src=\"./imgs/star.png\" width=\"20px\" />";
-        }
-        if ($halfStars > 0)
-        {
-            echo "<img src=\"./imgs/star_half.png\" width=\"20px\" />";
-        }
-        for ($s = 0; $s < $emptyStars; $s++)
-        {
-            echo "<img src=\"./imgs/star_empty.png\" width=\"20px\" />";
-        }
         echo "</h2>
-                            by $myUsername[0]<br /><br />
+                            by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $row[1]), 1) . "<br /><br />
                             $row[9]<br /><br />
-                            Difficulty: $row[6] | Prep Time: $row[7] | Cook Time: $row[8]
-                        </td>
-                    </tr>";
+                            Difficulty: $row[6] | Prep Time: $row[7] | Cook Time: $row[8]";
+
+        if ($i + 1 != $numberOfRows)
+        {
+            echo "<br /><br /><hr /><br />";
+        }
     }
-    echo "\n                </table>\n                <br />\n                <br />";
+    echo "\n                <br />\n                <br />";
     
     echo "\n                <div align=\"center\">\n";
     
