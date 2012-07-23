@@ -42,8 +42,8 @@
     	$row = mysqli_fetch_array($result);
         session_start();
         $_SESSION["xi_username"] = $myusername;
-        $_SESSION["xi_firstName"] = $row[2];
-        $_SESSION["xi_userType"] = $row[8];
+        $_SESSION["xi_firstName"] = $row['first_name'];
+        $_SESSION["xi_userType"] = $row['group'];
         session_register("xi_username");
         header("location:../login_success.php");
     }

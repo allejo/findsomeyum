@@ -68,9 +68,9 @@
             {
                 echo "<br /><h3>Comments</h3>
                 <form method=\"POST\" action=\"" . $_SERVER['REQUEST_URI'] . "&action=comment\"><br />
-                <textarea id=\"command\" name=\"comment\" rows=\"10\" cols=\"80\" /></textarea><br /><br />
+                <textarea id=\"formatted\" name=\"comment\" rows=\"10\" cols=\"80\" /></textarea><br /><br />
                 <input type=\"hidden\" name=\"submitted\" value=\"TRUE\" />
-                <input type=\"submit\" value=\"Comment\" />
+                <input id=\"formatted\" type=\"submit\" value=\"Comment\" />
                 </form><br /><br />";
             }
             else

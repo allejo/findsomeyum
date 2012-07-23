@@ -24,68 +24,189 @@
 
     if (isset($_POST['submitted']))
     {
-        $category = $_POST['category'];
-        $category = stripslashes($category);
-        $category = mysqli_real_escape_string($dbc, $category);
-        $title = $_POST['title'];
-        $title = stripslashes($title);
-        $title = mysqli_real_escape_string($dbc, $title);
-        $difficulty = $_POST['difficulty'];
-        $difficulty = stripslashes($difficulty);
-        $difficulty = mysqli_real_escape_string($dbc, $difficulty);
-        $image = $_POST['image'];
-        $image = stripslashes($image);
-        $image = mysqli_real_escape_string($dbc, $image);
-        $youtube = $_POST['youtube'];
-        $youtube = stripslashes($youtube);
-        $youtube = mysqli_real_escape_string($dbc, $youtube);
-        $prep_time = $_POST['prep_time'];
-        $prep_time = stripslashes($prep_time);
-        $prep_time = mysqli_real_escape_string($dbc, $prep_time);
-        $cook_time = $_POST['cook_time'];
-        $cook_time = stripslashes($cook_time);
-        $cook_time = mysqli_real_escape_string($dbc, $cook_time);
-        $description = $_POST['description'];
-        $description = stripslashes($description);
-        $description = mysqli_real_escape_string($dbc, $description);
-        $ingredients = $_POST['ingredients'];
-        $ingredients = stripslashes($ingredients);
-        $ingredients = mysqli_real_escape_string($dbc, $ingredients);
-        $directions = $_POST['directions'];
-        $directions = stripslashes($directions);
-        $directions = mysqli_real_escape_string($dbc, $directions);
-        $notes = $_POST['notes'];
-        $notes = stripslashes($notes);
-        $notes = mysqli_real_escape_string($dbc, $notes);
-
-        $getUserIDQuery = "SELECT user_id FROM members WHERE username = '" . $_SESSION['ns_username'] . "'";
-        $getUserIDResult =  @mysqli_query($dbc, $getUserIDQuery);
-        $getUserID = mysqli_fetch_array($getUserIDResult);
-
-        $addRecipeQuery = "INSERT INTO recipes (post_id, user_id, category, title, youtube, images, difficulty, prep_time, cook_time, description, ingredients, directions, notes, date_posted, date_edited, ipAddress) VALUES (NULL, '$getUserID[0]', '$category', '$title', '$youtube', '$image', '$difficulty', '$prep_time', '$cook_time', '$description', '$ingredients', '$directions', '$notes', NOW(), NOW(), '$userIP')";
-        $addRecipeResult = @mysqli_query($dbc, $addRecipeQuery) OR die ("Line 1 Error: " . mysqli_error($dbc));
-        $getLastInsertedRow = "SELECT post_id FROM recipes ORDER BY post_id DESC LIMIT 1";
-        $getLastInsertedRowResult = @mysqli_query($dbc, $getLastInsertedRow) OR die ("Error: " . mysqli_error($dbc));
-        $getLastInsertedRow = mysqli_fetch_array($getLastInsertedRowResult);
-        $getLastInsertedRow = $getLastInsertedRow[0];
-
-        if ($addRecipeResult)
+    	//reads the name of the file the user submitted for uploading
+		$image = $_FILES['image']['name'];
+		$errors = array();
+    
+		if (empty($_POST['category']))
+		{
+			$errors[] = 'A category was not specifed';
+		}
+		else
+		{
+	        $category = $_POST['category'];
+	        $category = stripslashes($category);
+	        $category = mysqli_real_escape_string($dbc, $category);
+        }
+        
+        if (empty($_POST['title']))
         {
-            header ("location: viewrecipe.php?recipeid=$getLastInsertedRow");
+	        $errors[] = 'No title was specified';
         }
         else
         {
-            //TODO Actually do something here!
-            echo "SOMETHING WENT WRONG!";
+	        $title = $_POST['title'];
+	        $title = stripslashes($title);
+	        $title = mysqli_real_escape_string($dbc, $title);
+        }
+        
+        if (empty($_POST['difficulty']))
+        {
+	        $errors[] = 'No difficulty was specified';
+        }
+        else
+        {
+	        $difficulty = $_POST['difficulty'];
+	        $difficulty = stripslashes($difficulty);
+	        $difficulty = mysqli_real_escape_string($dbc, $difficulty);
+        }
+        
+        $youtube = $_POST['youtube'];
+        $youtube = stripslashes($youtube);
+        $youtube = mysqli_real_escape_string($dbc, $youtube);
+        
+        if (empty($_POST['prep_time']))
+        {
+	        $errors[] = 'No preparation time was specified';
+        }
+        else
+        {
+	        $prep_time = $_POST['prep_time'];
+	        $prep_time = stripslashes($prep_time);
+	        $prep_time = mysqli_real_escape_string($dbc, $prep_time);
+        }
+        
+        if (empty($_POST['cook_time']))
+        {
+	        $errors[] = 'No cook time was specified';
+        }
+        else
+        {
+    	    $cook_time = $_POST['cook_time'];
+	        $cook_time = stripslashes($cook_time);
+	        $cook_time = mysqli_real_escape_string($dbc, $cook_time);
+        }
+        
+        if (empty($_POST['description']))
+        {
+	        $errors[] = 'No descriptoin was specified';
+	    }
+        else
+        {
+	        $description = $_POST['description'];
+	        $description = stripslashes($description);
+	        $description = mysqli_real_escape_string($dbc, $description);
+        }
+        
+        if (empty($_POST['ingredients']))
+        {
+        	$errors[] = 'No ingredients were specified';
+        }
+        else
+        {
+	        $ingredients = $_POST['ingredients'];
+	        $ingredients = stripslashes($ingredients);
+	        $ingredients = mysqli_real_escape_string($dbc, $ingredients);
+        }
+        
+        if (empty($_POST['directions']))
+        {
+	        $errors[] = 'No directions were specified';
+        }
+        else
+        {
+	        $directions = $_POST['directions'];
+	        $directions = stripslashes($directions);
+	        $directions = mysqli_real_escape_string($dbc, $directions);
+	    }
+        
+        $notes = $_POST['notes'];
+        $notes = stripslashes($notes);
+        $notes = mysqli_real_escape_string($dbc, $notes);
+		
+		if ($image)
+		{
+			define ("MAX_SIZE","100"); 
+			
+			//get the original name of the file from the clients machine
+			$filename = stripslashes($_FILES['image']['name']);
+			//get the extension of the file in a lower case format
+			$extension = XiON_getExtension($filename);
+			$extension = strtolower($extension);
+			
+			if (($extension != "jpg") && ($extension != "jpeg") && ($extension != "png") && ($extension != "gif")) 
+			{
+				//Unknown extension
+				$error[] = 'Invalid file type uploaded';
+			}
+			else
+			{
+				$size = filesize($_FILES['image']['tmp_name']);
+		
+				if ($size > MAX_SIZE*1024)
+				{
+					//Over the size limit
+					$error[] = 'Image select is too large to upload';
+				}
+		
+				//we will give an unique name, for example the time in unix time format
+				$image_name = time() . '.' . $extension;
+				$newname="imgs/recipes/" . $image_name;
+				$copied = copy($_FILES['image']['tmp_name'], $newname);
+				
+				if (!$copied) 
+				{
+					//Something went wrong
+					$error[] = 'An unknown error has occured while uploading the image.';
+				}
+			}
+		}
+
+		if (empty($errors))
+		{
+	        $getUserIDQuery = "SELECT user_id FROM members WHERE username = '" . $_SESSION['ns_username'] . "'";
+	        $getUserIDResult =  @mysqli_query($dbc, $getUserIDQuery);
+	        $getUserID = mysqli_fetch_array($getUserIDResult);
+	
+	        $addRecipeQuery = "INSERT INTO recipes (post_id, user_id, category, title, youtube, images, difficulty, prep_time, cook_time, description, ingredients, directions, notes, date_posted, date_edited, ipAddress) VALUES (NULL, '$getUserID[0]', '$category', '$title', '$youtube', '$image_name', '$difficulty', '$prep_time', '$cook_time', '$description', '$ingredients', '$directions', '$notes', NOW(), NOW(), '$userIP')";
+	        $addRecipeResult = @mysqli_query($dbc, $addRecipeQuery) OR die ("Line 1 Error: " . mysqli_error($dbc));
+	        $getLastInsertedRow = "SELECT post_id FROM recipes ORDER BY post_id DESC LIMIT 1";
+	        $getLastInsertedRowResult = @mysqli_query($dbc, $getLastInsertedRow) OR die ("Error: " . mysqli_error($dbc));
+	        $getLastInsertedRow = mysqli_fetch_array($getLastInsertedRowResult);
+	        $getLastInsertedRow = $getLastInsertedRow[0];
+	
+	        if ($addRecipeResult)
+	        {
+	            header ("location: viewrecipe.php?recipeid=$getLastInsertedRow");
+	        }
+        }
+        else
+        {
+   		    include("includes/header.php");
+		    include("includes/menubar.php");
+
+            echo '<div id="content">
+                  <p class="error"><strong>The following error(s) occurred:</strong><br />';
+                
+            foreach ($errors as $msg) //Go through all the errors and output them
+            {
+                echo " - $msg<br />\n";
+            }
+            
+            echo "</p><br />";
         }
     }
+    else
+    {	    
+	    include("includes/header.php");
+	    include("includes/menubar.php");
+	    echo "<div id=\"content\">";
+    }
 
-    include("includes/header.php");
-    include("includes/menubar.php");
 ?>
 
-<div id="content">
-    <form method="post" action="newrecipe.php">
+    <form method="post" action="newrecipe.php" enctype="multipart/form-data">
+        <input id="formatted" style="width: 585px" name="title" type="text" id="title" placeholder="Title" width="100%" value="<?php if(isset($_POST['title'])) echo $_POST['title']; ?>"/><br /><br />
         <select name="category">
             <option value="">Select Category</option>
             <option value="Appetizers">Appetizers</option>
@@ -103,18 +224,15 @@
             <option value="Medium">Medium</option>
             <option value="Difficult">Difficult</option>
         </select>
-        <br />
-        <br />
-        Title <input class="input" name="title" type="text" id="title" placeholder="Title" width="100%" /><br />
-        Image <input class="input" name="image" type="text" id="image" placeholder="Image URL" /><br />
-        http://www.youtube.com/watch?v=<input class="input" name="youtube" type="text" id="youtube" placeholder="YouTube URL" /><br />
-        Prep Time <input name="prep_time" type="text" id="prep_time" placeholder="Prep Time (Minutes)" />
-        Cook Time <input name="cook_time" type="text" id="cook_time" placeholder="Cook Time (Minutes)" /><br /><br />
-        Description<br /><textarea name="description" rows="10" cols="80" /></textarea><br /><br />
-        Ingredients<br /><textarea name="ingredients" rows="15" cols="80" /></textarea><br /><br />
-        Directions<br /><textarea name="directions" rows="15" cols="80" /></textarea><br /><br />
-        Notes<br /><textarea name="notes" rows="10" cols="80" /></textarea><br /><br /><br />
-        <input type="submit" value="Submit" />
+        Image <input type="file" name="image"><br /><br />
+        http://www.youtube.com/watch?v=<input id="formatted" style="width: 185px" name="youtube" type="text" id="youtube" placeholder="YouTube ID" maxlength="11"/><br /><br />
+        Prep Time <input id="formatted" name="prep_time" type="text" id="prep_time" placeholder="Prep Time (Minutes)" />
+        Cook Time <input id="formatted" name="cook_time" type="text" id="cook_time" placeholder="Cook Time (Minutes)" /><br /><br />
+        Description<br /><textarea id="formatted" name="description" rows="10" cols="80" /></textarea><br /><br />
+        Ingredients<br /><textarea id="formatted" name="ingredients" rows="15" cols="80" /></textarea><br /><br />
+        Directions<br /><textarea id="formatted" name="directions" rows="15" cols="80" /></textarea><br /><br />
+        Notes<br /><textarea id="formatted" name="notes" rows="10" cols="80" /></textarea><br /><br /><br />
+        <input id="formatted" type="submit" value="Submit" />
         <input type="hidden" name="submitted" value="TRUE" />
     </form>
 </div>

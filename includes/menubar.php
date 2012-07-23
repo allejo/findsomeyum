@@ -56,7 +56,7 @@
     {
 ?>
                 <div id="content">
-                    <h6><a href="admin/login.php">[Adminstrator Control Panel]</a></h6>
+                    <h6><a href="admin/login.php" target="_blank">[Adminstrator Control Panel]</a></h6>
                 </div>
 <?php
     }

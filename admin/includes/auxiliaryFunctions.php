@@ -392,4 +392,24 @@
 
         return $getCommentsCount;
     }
+    
+    /* =============================================
+    
+        XiON_getExtension($file)
+        
+        values
+            $file - (string) the file name
+        description
+           returns the extension of an uploaded file to check for an image
+            
+    */
+    
+     function XiON_getExtension($file)
+     {
+         $i = strrpos($file,".");
+         if (!$i) { return ""; }
+         $l = strlen($file) - $i;
+         $ext = substr($file, $i+1, $l);
+         return $ext;
+     }
 ?>
