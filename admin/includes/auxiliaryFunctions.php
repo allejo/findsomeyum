@@ -160,6 +160,21 @@
     
     /* =============================================
     
+    	XiON_getUserIDFromSession($mysql_connection)
+    	
+    	values
+    		$mysql_connection - (mysqli_connect) the connection to our database
+    	description
+    		get the user's id number from the session
+    */
+    
+    function XiON_getUserIDFromSession($mysql_connection)
+    {
+	    return XiON_getUserIDFromUsername($mysql_connection, XiON_getUsernameFromSession());
+    }
+    
+    /* =============================================
+    
     	XiON_getUserIDFromUsername($mysql_connection, $username)
     	
     	values
@@ -232,7 +247,7 @@
 	    }
 	    else
 	    {
-	    	return "<span style=\"color: " . $userTypeColor . "\">" . $username . "</span>";
+	    	return "<span style=\"color: " . $userTypeColor[1] . "\">" . $username . "</span>";
 	    }
     }
 

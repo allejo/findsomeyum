@@ -196,13 +196,37 @@ html, body
 #content .profile .avatar
 {
     min-height: 200px;
+    width: 200px;
     float: left;
 }
 
-#content .profile .name
+#content .profile .information
 {
-    padding-left: 20px;
-    float: left;
+	width: 500px;
+	margin-left: 10px;
+	float: left;
+}
+
+#content .profile .message
+{
+	width: 200px;
+	float: right;
+}
+
+#content .profile .message
+{
+	float: right;
+}
+
+#content .profile .message a
+{
+	padding: 10px;
+	margin: 0px 5px;
+}
+
+#content .profile .message h1, #content .profile .message strong
+{
+	margin: auto;
 }
 
 #content .center

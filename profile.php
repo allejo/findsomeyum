@@ -16,6 +16,7 @@
     if (isset($_GET['user']))
     {
         require_once('admin/includes/mysql_connection.php');
+        require_once('admin/includes/auxiliaryFunctions.php');
         $user = stripslashes($_GET['user']);
         $user = mysqli_real_escape_string($dbc, $user);
         
@@ -24,21 +25,58 @@
         $myUserInfo = mysqli_fetch_array($userNameResult);
         $numberOfUsers = mysqli_num_rows($userNameResult);
         
-        $userColorQuery = "SELECT * FROM groups WHERE groups.userType = '" . $myUserInfo[1] . "' LIMIT 1";
-        $userColorResult = @mysqli_query($dbc, $userColorQuery) OR die ("Error: " . mysqli_error($dbc));
-        $userColor = mysqli_fetch_array($userColorResult);
+        if (isset($_GET['follow']))
+        {
+        	$userFollowers = "SELECT following FROM members WHERE user_id = '" . XiON_getUserIDFromSession($dbc) . "'";
+        	$userFollowersResult = @mysqli_query($dbc, $userFollowers);
+        	$myUserData = mysqli_fetch_array($userFollowersResult);
+        	
+        	$myFollowers = explode(",", $myUserData[0]);
+        	$error = 0;
+            
+            foreach ($myFollowers as $myUser)
+            {
+	            if ($myUser == $user || XiON_getUserIDFromSession($dbc) == $user)
+	            {
+		            $error = 1;
+	            }
+            }
+        	
+        	if ($error == 0)
+        	{
+		        $newFollower = "UPDATE members SET followers='" . $myUserInfo['followers'] . "," . XiON_getUserIDFromSession($dbc) . "' WHERE members.user_id = '" . $user . "' LIMIT 1";
+		        $newFollowerResult = @mysqli_query($dbc, $newFollower);
+		        $newFollower = "UPDATE members SET following='" . $myUserData[0] . "," . $user . "' WHERE members.user_id = '" . XiON_getUserIDFromSession($dbc) . "' LIMIT 1";
+		        $newFollowerResult = @mysqli_query($dbc, $newFollower);
+		    }
+	        
+	        header("location: profile.php?user=" . $user);
+        }
         
         if ($numberOfUsers == 1)
         {
             include("includes/header.php");
             include("includes/menubar.php");
             
+            $myFollowers = explode(",", $myUserInfo['followers']);
+            $totalFollowers = 0;
+            
+            foreach ($myFollowers as $myUser)
+            {
+	            if (is_numeric($myUser))
+	            {
+		            $totalFollowers++;
+	            }
+            }
+            
+            
             echo "            <div id=\"content\">
-                <div class=\"profile\">\n";
+                <div class=\"profile\">\n
+                <div class=\"avatar\">";
             
             if (file_exists("./imgs/avatars/" . $user . ".png"))
             {
-                echo "                   <img class=\"avatar\" src=\"./imgs/avatars/" . $user . ".png\" width=\"200\" height=\"200\">";
+                echo "                   <img src=\"./imgs/avatars/" . $user . ".png\" width=\"200\" height=\"200\">";
             }
             else if (file_exists("./imgs/avatars/" . $user . ".jpeg"))
             {
@@ -53,12 +91,65 @@
                 echo "                   <img class=\"avatar\" src=\"./imgs/avatars/none.gif\" width=\"200\" height=\"200\">";
             }
             
-            echo "\n                   <span class=\"name\">
-                       <h2 style=\"color: $userColor[1]\">$myUserInfo[2]</h2>
-                       $myUserInfo[7]
-                   </span>
-                </div>
-            </div>";
+            echo "\n</div><!-- End .avatar -->                   <div class=\"information\"><h2>";
+            
+            echo XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $user), 0);
+            echo "</h2>           $myUserInfo[7]
+                   <br /><br />";
+            
+            if (!empty($myUserInfo['first_name']))
+            {
+	            echo "       <strong>Real Name</strong>: " . $myUserInfo['first_name'] . " " . $myUserInfo['last_name'];
+            }
+            
+            if (!empty($myUserInfo['job']))
+            {
+	            echo "<br /><strong>Job</strong>: " . $myUserInfo['job'];
+            }
+            
+            if (!empty($myUserInfo['hobbies']))
+            {
+	            echo "<br /><strong>Hobbies</strong>: " . $myUserInfo['hobbies'];
+            }
+            
+            if ($myUserInfo['gender'] == "M")
+            {
+	            echo "<br /><strong>Gender</strong>: Male";
+            }
+            else if ($myUserInfo['gender'] == "F")
+            {
+	            echo "<br /><strong>Gender</strong>: Female";
+            }
+            
+            if (!empty($myUserInfo['birthday']))
+            {
+	            echo "<br /><strong>Birthday</strong>: " . $myUserInfo['birthday'];
+            }
+            
+            if (!empty($myUserInfo['registration_date']))
+            {
+	            echo "<br /><strong>Member Since</strong>: " . $myUserInfo['registration_date'];
+            }
+            
+            if (!empty($myUserInfo['bio']))
+            {
+	            echo "<br /><strong>Biography</strong>: " . $myUserInfo['bio'];
+            }
+            
+			echo "</div><!-- End information -->";
+			
+			if (session_is_registered(ns_username))
+			{
+				echo "<div class=\"message\">
+	                   <a href=\"" . $_SERVER['REQUEST_URI'] . "&follow=$user\" class=\"download_button orange\">Follow</a>
+				       <a href=\"\" class=\"download_button orange\">Message</a><br /><br /><br />";
+			}
+			
+			echo "<center><h1>" . $totalFollowers . "</h1><strong>Followers</strong></center>";
+			
+			echo "</div> <!-- End .message -->
+			</div> <!-- End .profile -->
+            </div> <!-- End .content -->";
             
             include("includes/footer.php");
         }
