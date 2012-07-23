@@ -171,6 +171,21 @@ html, body
     background-repeat: no-repeat;
 }
 
+#content .account td
+{
+	text-align: center;
+}
+
+#content .account a
+{
+	text-decoration: none;
+}
+
+#content .account img
+{
+	margin-top: 20px;
+}
+
 #content .blog a
 {
     color: #CC6600;
