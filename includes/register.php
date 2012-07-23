@@ -14,132 +14,130 @@
     */
 
     // Check if the form has been submitted:
-    if (isset($_POST['submitted']))
-    {
-        require_once('../admin/includes/mysql_connection.php');
-        require_once('../admin/includes/auxiliaryFunctions.php');
-        require_once('../../captcha/recaptchalib.php');
-        $privatekey = "6Lc5-NMSAAAAAJ_Ysr2kj8aLfyALS_z9IeqiY5Rf";
-        $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
+    
+    require_once('../admin/includes/mysql_connection.php');
+    require_once('../admin/includes/auxiliaryFunctions.php');
+    require_once('../../captcha/recaptchalib.php');
+    $privatekey = "6Lc5-NMSAAAAAJ_Ysr2kj8aLfyALS_z9IeqiY5Rf";
+    $resp = recaptcha_check_answer ($privatekey, $_SERVER["REMOTE_ADDR"], $_POST["recaptcha_challenge_field"], $_POST["recaptcha_response_field"]);
 
-        if (!$resp->is_valid)
+    if (!$resp->is_valid)
+    {
+        // What happens when the CAPTCHA was entered incorrectly
+        header("location:../register.php?register=false&issue=reCaptcha");
+    }
+    else
+    {
+       $errors = array(); // Initialize an error array.
+    
+        //Santitation and checking if username exists already
+        $username = trim($_POST['username']);
+        $username = stripslashes($username);
+        $username = mysqli_real_escape_string($dbc, $username);
+        $checkUserNameQuery = "SELECT username FROM members WHERE username = '$username'";
+        $result = @mysqli_query($dbc, $checkUserNameQuery);
+        $row = mysqli_fetch_array($result);
+        $count = mysqli_num_rows($result);
+        //Check the first name
+        if (empty($_POST['username']))
         {
-            // What happens when the CAPTCHA was entered incorrectly
-            header("location:../membership.php?register=false&issue=reCaptcha");
+            $errors[] = "username";
+        }
+        else if ($count == 1)
+        {
+            $errors[] = "unUnavailable";
+        }
+        
+        //Check the first name
+        if (empty($_POST['first_name']))
+        {
+            $errors[] = "firstName";
         }
         else
         {
-           $errors = array(); // Initialize an error array.
+            $first_name = trim($_POST['first_name']);
+            $first_name = stripslashes($first_name);
+            $first_name = mysqli_real_escape_string($dbc, $first_name);
+        }
+            
+        //And check the last name...
+        if (empty($_POST['last_name']))
+        {
+            $errors[] = "lastName";
+        }
+        else
+        {
+            $last_name = trim($_POST['last_name']);
+            $last_name = stripslashes($last_name);
+            $last_name = mysqli_real_escape_string($dbc, $last_name);
+        }
+            
+        //And check the email...
+        if (empty($_POST['email']))
+        {
+            $errors[] = "email";
+        }
+        else
+        {
+            $email = trim($_POST['email']);
+            $email = stripslashes($email);
+            $email = mysqli_real_escape_string($dbc, $email);
+        }
         
-            //Santitation and checking if username exists already
-            $username = trim($_POST['username']);
-            $username = stripslashes($username);
-            $username = mysqli_real_escape_string($dbc, $username);
-            $checkUserNameQuery = "SELECT username FROM members WHERE username = '$username'";
-            $result = @mysqli_query($dbc, $checkUserNameQuery);
-            $row = mysqli_fetch_array($result);
-            $count = mysqli_num_rows($result);
-            //Check the first name
-            if (empty($_POST['username']))
+        //Check to make sure that the password and confirmation are the same and are valid
+        if (!empty($_POST['pass1']) || !empty($_POST['pass2']))
+        {
+            if ($_POST[‘pass1’] != $_POST[‘pass2’])
             {
-                $errors[] = "username";
-            }
-            else if ($count == 1)
-            {
-                $errors[] = "unUnavailable";
-            }
-            
-            //Check the first name
-            if (empty($_POST['first_name']))
-            {
-                $errors[] = "firstName";
+                $errors[] = "passM";
             }
             else
             {
-                $first_name = trim($_POST['first_name']);
-                $first_name = stripslashes($first_name);
-                $first_name = mysqli_real_escape_string($dbc, $first_name);
+                $password = trim($_POST['pass1']);
+                $password = stripslashes($password);
+                $password = mysqli_real_escape_string($dbc, $password);
             }
-                
-            //And check the last name...
-            if (empty($_POST['last_name']))
-            {
-                $errors[] = "lastName";
-            }
-            else
-            {
-                $last_name = trim($_POST['last_name']);
-                $last_name = stripslashes($last_name);
-                $last_name = mysqli_real_escape_string($dbc, $last_name);
-            }
-                
-            //And check the email...
-            if (empty($_POST['email']))
-            {
-                $errors[] = "email";
-            }
-            else
-            {
-                $email = trim($_POST['email']);
-                $email = stripslashes($email);
-                $email = mysqli_real_escape_string($dbc, $email);
-            }
-            
-            //Check to make sure that the password and confirmation are the same and are valid
-            if (!empty($_POST['pass1']) || !empty($_POST['pass2']))
-            {
-                if ($_POST[‘pass1’] != $_POST[‘pass2’])
-                {
-                    $errors[] = "passM";
-                }
-                else
-                {
-                    $password = trim($_POST['pass1']);
-                    $password = stripslashes($password);
-                    $password = mysqli_real_escape_string($dbc, $password);
-                }
-            }
-            else
-            {
-                $errors[] = "pass";
-            }
-            
-            if (empty($errors)) //The user imputted all the fields perfectly without error
-            {
-                $logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'registration', '$username', '$userIP', '$myusername created an account from $userIP')";
-                $run_query = @mysqli_query($dbc, $logQuery);
+        }
+        else
+        {
+            $errors[] = "pass";
+        }
         
-                $password = encryptPassword($username, $password);
-                //Create the query, execute it, and save the values returned into an array
-                $query = "INSERT INTO members (user_id, username, first_name, last_name, email, pass, registration_date, premium) VALUES (NULL, '$username', '$first_name', '$last_name', '$email', '$password', NOW(), '0')";
-                $run_query = @mysqli_query($dbc, $query) OR die ("sql error" . mysqli_error($dbc));
-                
-                if ($run_query) //Hurray no errors!
-                {
-                    session_start();
-                    $_SESSION["ns_username"] = $username;
-                    session_register("ns_username");
-                    header("Location: ../grocerylist.php");
-                }
-                else //Crap. Something went wrong
-                {
-                    include("includes/header.php");
-                    include("includes/menubar.php");
-                    echo "<h2>Fatal Error</h2>
-                    <p>An unknown fatal error, which should not have occured, has occured. Please contact the system <a href=\"mailto:allejo@me.com\">administrator</a> immediately.</p>";
-                    include("includes/footer.php");
-                }
-            }
-            else //The user forgot to fill in one of the fields
+        if (empty($errors)) //The user imputted all the fields perfectly without error
+        {
+            $logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'registration', '$username', '$userIP', '$myusername created an account from $userIP')";
+            $run_query = @mysqli_query($dbc, $logQuery);
+    
+            $password = encryptPassword($username, $password);
+            //Create the query, execute it, and save the values returned into an array
+            $query = "INSERT INTO members (user_id, username, first_name, last_name, email, pass, registration_date, premium) VALUES (NULL, '$username', '$first_name', '$last_name', '$email', '$password', NOW(), '0')";
+            $run_query = @mysqli_query($dbc, $query) OR die ("sql error" . mysqli_error($dbc));
+            
+            if ($run_query) //Hurray no errors!
             {
-                $issues = "";
-                foreach ($errors as $msg) //Go through all the errors and output them
-                {
-                    $issues .= "$msg,";
-                }
-                
-                header("location:../membership.php?register=false&issue=$issues&username=$username&first_name=$first_name&last_name=$last_name&email=$email");
+                session_start();
+                $_SESSION["ns_username"] = $username;
+                session_register("ns_username");
+                header("Location: ../recipes.php");
             }
-        }   
+            else //Crap. Something went wrong
+            {
+                include("includes/header.php");
+                include("includes/menubar.php");
+                echo "<h2>Fatal Error</h2>
+                <p>An unknown fatal error, which should not have occured, has occured. Please contact the system <a href=\"mailto:allejo@me.com\">administrator</a> immediately.</p>";
+                include("includes/footer.php");
+            }
+        }
+        else //The user forgot to fill in one of the fields
+        {
+            $issues = "";
+            foreach ($errors as $msg) //Go through all the errors and output them
+            {
+                $issues .= "$msg,";
+            }
+            
+            header("location:../register.php?register=false&issue=$issues&username=$username&first_name=$first_name&last_name=$last_name&email=$email");
+        }
     }
 ?>

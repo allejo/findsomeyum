@@ -14,6 +14,12 @@
     */
     
     session_start();
+    
+    if (session_is_registered(ns_username))
+    {
+	    header ("location: recipes.php");
+    }
+    
 
     //Build the header and the navigation area
     include("includes/header.php");

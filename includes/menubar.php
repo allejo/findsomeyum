@@ -25,7 +25,11 @@
     
     if (!session_is_registered(ns_username))
     {
-        echo "<a href=\"#register-box\" class=\"links login-window\" style=\"color: yellow;\">Register</a>";
+    	if (!strstr($_SERVER['PHP_SELF'], "register.php"))
+	        echo "<a href=\"#register-box\" class=\"links login-window\" style=\"color: yellow;\">Register</a>";
+	    else
+	    	echo "<a href=\"\" class=\"links\" style=\"color: yellow;\">Register</a>";
+	    	
         echo "<a href=\"#login-box\" class=\"links login-window\" style=\"color: yellow;\">Log In</a>";
     }
     else
@@ -34,7 +38,7 @@
         
         if (strpos($currentPage, "account.php"))
         {
-            echo "<a href=\"account.php\" class=\"links active\">account</a>";
+            echo "<a href=\"account.php\" class=\"links active\">Account</a>";
         }
         else
         {

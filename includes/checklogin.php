@@ -51,7 +51,7 @@
 		$logQuery = "INSERT INTO logs (time, actionType, username, ipaddress, description) VALUES (NOW(), 'login', '$myusername', '$userIP', '<p class=\"error\">Failed member login attempt.</p>')";
         $run_query = @mysqli_query($dbc, $logQuery);
 
-        header("location:../membership.php?login=false");
+        header("location:../login.php?login=false");
     }
     
     ob_end_flush();

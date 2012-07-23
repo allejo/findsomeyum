@@ -175,7 +175,7 @@
         {
     ?>
         <div id="login-box" class="login-popup">
-            <a href="#" class="close"><img src="imgs/close_pop.png" style="margin-left: 200px" class="btn_close" title="Close Window" alt="Close" /></a>
+            <a href="#" class="close"><img src="imgs/close_pop.png" style="margin-left: 320px" class="btn_close" title="Close Window" alt="Close" /></a>
             <form method="post" class="signin" action="includes/checklogin.php">
                 <fieldset class="textbox">
                     <label class="username">
@@ -191,9 +191,13 @@
                 </fieldset>
             </form>
         </div>
+<?php
+	if (!strstr($_SERVER['PHP_SELF'], "register.php"))
+	{
+?>
         <div id="register-box" class="login-popup">
-            <a href="#" class="close"><img src="imgs/close_pop.png" style="margin-left: 200px" class="btn_close" title="Close Window" alt="Close" /></a>
-            <form method="post" class="signin" action="includes/checklogin.php">
+            <a href="#" class="close"><img src="imgs/close_pop.png" style="margin-left: 320px" class="btn_close" title="Close Window" alt="Close" /></a>
+            <form method="post" class="signin" action="includes/register.php">
                 <fieldset class="textbox">
                     <label class="username">
                         <span>Username</span>
@@ -211,12 +215,18 @@
                         <span>Confirm Password</span>
                         <input name="cpassword" type="password" id="mycpassword" placeholder="Confirm Password">
                     </label>
+                    <?php
+                        require_once('../captcha/recaptchalib.php');
+                        $publickey = "6Lc5-NMSAAAAAFeAgEf4CpV3J5ijBHix1NrKky5E";
+                        echo recaptcha_get_html($publickey);
+                    ?>
                     <br />
                     <input type="submit" name="Submit" value="Register">
                 </fieldset>
             </form>
         </div>
     <?php
+    	}
         }
     ?>
         <div id="wrapper">
