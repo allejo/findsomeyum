@@ -56,12 +56,16 @@
     
     echo "\n            </div>\n";
 
-    if ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev")
+    if ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev" || $_SESSION["ns_userType"] == "moderator")
     {
-?>
-                <div id="content">
-                    <h6><a href="admin/login.php" target="_blank">[Adminstrator Control Panel]</a></h6>
-                </div>
-<?php
+        echo "<div id=\"content\">";
+        
+        if ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev")
+        {
+            echo "<small><strong><a href=\"admin/login.php\" target=\"_blank\">[Adminstrator Control Panel]</a></strong></small> ";
+        }
+
+        echo "<small><strong><a href=\"modcp.php\">[Moderator Control Panel]</a></strong></small></h6>";
+        echo "</div>";
     }
 ?>

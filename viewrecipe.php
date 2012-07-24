@@ -32,6 +32,9 @@
                 $comment = mysqli_real_escape_string($dbc, $comment);
                 $user_id = XiON_getUserIDFromUsername($dbc, XiON_getUsernameFromSession());
 
+                $lastActivity = "UPDATE recipes SET last_activity=NOW() WHERE post_id='" . $recipeID . "'";
+                $lastActivityQuery = @mysqli_query($dbc, $lastActivity) OR die ("Error: " . mysqli_error($dbc));
+
                 $addNewCommentQuery = "INSERT INTO comments (post_section, parent_post, user_id, content, date_posted, date_edited) VALUES ('recipe', '$recipeID', '$user_id', '$comment', NOW(), NOW())";
                 $addNewComment = @mysqli_query($dbc, $addNewCommentQuery) OR die ("Error: " . mysqli_error($dbc));
 
@@ -53,11 +56,46 @@
 	    
 	    if ($wasRatingSubmitted == 0)
 	    {
+            $lastActivity = "UPDATE recipes SET last_activity=NOW() WHERE post_id='" . $recipeID . "'";
+            $lastActivityQuery = @mysqli_query($dbc, $lastActivity) OR die ("Error: " . mysqli_error($dbc));
+
         	$addNewRatingQuery = "INSERT INTO ratings (user_id, recipe_id, value, date) VALUES ('$user_id', '$recipeID', '$rating', NOW())";
         	$addNewRating = @mysqli_query($dbc, $addNewRatingQuery) OR die ("Error:" . mysqli_error($dbc));
         }
         
         header("location: viewrecipe.php?recipeid=" . $recipeID);
+    }
+    else if ($_GET['action'] == "flag")
+    {
+        if (isset($_POST['submitted']))
+        {
+            $user_id = XiON_getUserIDFromSession($dbc);
+            $report = $_POST['report'];
+            $report = stripslashes($report);
+            $report = mysqli_real_escape_string($dbc, $report);
+            $myIP = XiON_getUserIP();
+
+            $addFlag = "INSERT INTO flags (recipe_id, user_id, reason, ipAddress, date, status) VALUES ('$recipeID', '$user_id', '$report', '$myIP', NOW(), 'Open')";
+            $addFlagQuery = @mysqli_query($dbc, $addFlag);
+
+            header("location: viewrecipe.php?recipeid=" . $recipeID);
+        }
+        else
+        {
+            include("includes/header.php");
+            include("includes/menubar.php");
+?>
+            <div id="content">                  
+                <form method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?>">
+                    <textarea id="formatted" name="report" rows="10" cols="80"></textarea><br /><br />
+                    <input type="hidden" name="submitted" value="TRUE" />
+                    <input id="formatted" type="submit" value="Flag" />
+                </form>
+            </div>
+<?php
+        include("includes/footer.php");
+        exit();
+        }
     }
     
     if (!isset($_GET['recipeid']))
@@ -79,8 +117,20 @@
     
     echo "<div id=\"content\">
         <div class=\"viewrecipe\">";
-    
-    echo "<span class=\"title\">" . $recipeData['title'] . "</span> <span class=\"category\">[" . $recipeData['category'] . "]</span> <br />\n";
+    echo "<div class=\"buttons\">";
+    if (session_is_registered(ns_username))
+    {
+        echo XiON_checkForReport($dbc, $recipeID, XiON_getUserIDFromSession($dbc), 1);
+
+        if ($recipeData['user_id'] ==  XiON_getUserIDFromSession($dbc) || ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev" || $_SESSION["ns_userType"] == "moderator"))
+        {
+            echo "<a href=\"editrecipe.php?recipeid=" . $recipeID . "\"><img src=\"imgs/sys/pencil.png\" width=\"30\" /></a>";
+            echo "<img src=\"imgs/sys/delete.png\" width=\"30\" />";
+        }
+
+        echo "</div>";
+    }
+    echo "<span class=\"title\">" . XiON_checkForReport($dbc, $recipeID, null, 0) . $recipeData['title'] . "</span> <span class=\"category\">[" . $recipeData['category'] . "]</span> <br />\n";
     echo "<div class=\"author\">by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $recipeData['user_id']), 1) . "</div> <!-- End .author -->\n";
     echo "<div class=\"rating\">" . XiON_getStarRating($dbc, XiON_getRating($dbc, $recipeID)) . " <small>(" . XiON_getRating($dbc, $recipeID) . " / 5)</small></div> <!-- End .rating --><br /><br />\n";
     
@@ -139,7 +189,7 @@
 		}
 ?>
         <br /><h3>Comments</h3>
-        <form method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?> &action=comment"><br />
+        <form method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?>&action=comment"><br />
         <textarea id="formatted" name="comment" rows="10" cols="80" /></textarea><br /><br />
         <input type="hidden" name="submitted" value="TRUE" />
         <input id="formatted" type="submit" value="Comment" />

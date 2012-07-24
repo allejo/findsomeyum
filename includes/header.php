@@ -201,19 +201,19 @@
                 <fieldset class="textbox">
                     <label class="username">
                         <span>Username</span>
-                        <input name="username" type="text" id="myusername" autocomplete="on" placeholder="Username">
+                        <input name="username" type="text" id="username" autocomplete="on" placeholder="Username">
                     </label>
                     <label class="email">
                         <span>Email</span>
-                        <input name="email" type="text" id="myemail" autocomplete="on" placeholder="Email">
+                        <input name="email" type="text" id="email" autocomplete="on" placeholder="Email">
                     </label>
                     <label class="password">
                         <span>Password</span>
-                        <input name="password" type="password" id="mypassword" placeholder="Password">
+                        <input name="pass1" type="password" id="pass1" placeholder="Password">
                     </label>
                     <label class="password">
                         <span>Confirm Password</span>
-                        <input name="cpassword" type="password" id="mycpassword" placeholder="Confirm Password">
+                        <input name="pass2" type="password" id="pass2" placeholder="Confirm Password">
                     </label>
                     <?php
                         require_once('../captcha/recaptchalib.php');

@@ -47,30 +47,6 @@
         {
             $errors[] = "unUnavailable";
         }
-        
-        //Check the first name
-        if (empty($_POST['first_name']))
-        {
-            $errors[] = "firstName";
-        }
-        else
-        {
-            $first_name = trim($_POST['first_name']);
-            $first_name = stripslashes($first_name);
-            $first_name = mysqli_real_escape_string($dbc, $first_name);
-        }
-            
-        //And check the last name...
-        if (empty($_POST['last_name']))
-        {
-            $errors[] = "lastName";
-        }
-        else
-        {
-            $last_name = trim($_POST['last_name']);
-            $last_name = stripslashes($last_name);
-            $last_name = mysqli_real_escape_string($dbc, $last_name);
-        }
             
         //And check the email...
         if (empty($_POST['email']))
@@ -137,7 +113,7 @@
                 $issues .= "$msg,";
             }
             
-            header("location:../register.php?register=false&issue=$issues&username=$username&first_name=$first_name&last_name=$last_name&email=$email");
+            header("location:../register.php?register=false&issue=$issues");
         }
     }
 ?>

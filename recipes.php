@@ -34,7 +34,7 @@
     $rows_per_page = 15;
     $lastpage = ceil($numrows/$rows_per_page);
 
-    $myRecipesQuery = "SELECT * FROM recipes ORDER BY date_posted DESC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
+    $myRecipesQuery = "SELECT * FROM recipes ORDER BY last_activity DESC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
     $myRecipesResult = @mysqli_query($dbc, $myRecipesQuery) OR die ("Error: " . mysqli_error($dbc));
     $numberOfRows = mysqli_num_rows($myRecipesResult);
 
@@ -54,17 +54,20 @@
     {
         $row = mysqli_fetch_array($myRecipesResult);
 
-        echo "\n                    <h2><a href=\"viewrecipe.php?recipeid=$row[0]\">$row[3]</a>";
-        echo XiON_getStarRating($dbc, XiON_getRating($dbc, $row['post_id']));
-        
-        echo "</h2>
-                            by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $row[1]), 1) . "<br /><br />
-                            $row[9]<br /><br />
-                            Difficulty: $row[6] | Prep Time: $row[7] | Cook Time: $row[8]";
-
-        if ($i + 1 != $numberOfRows)
+        if ($row['visible'] == 1 || ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev" || $_SESSION["ns_userType"] == "moderator"))
         {
-            echo "<br /><br /><hr /><br />";
+            echo "\n                    <h2><a href=\"viewrecipe.php?recipeid=$row[0]\">$row[3]</a>";
+            echo XiON_getStarRating($dbc, XiON_getRating($dbc, $row['post_id']));
+            
+            echo "</h2>
+                                by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $row[1]), 1) . "<br /><br />
+                                $row[9]<br /><br />
+                                Difficulty: $row[6] | Prep Time: $row[7] | Cook Time: $row[8]";
+
+            if ($i + 1 != $numberOfRows)
+            {
+                echo "<br /><br /><hr /><br />";
+            }
         }
     }
     echo "\n                <br />\n                <br />";

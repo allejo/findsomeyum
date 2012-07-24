@@ -427,4 +427,61 @@
          $ext = substr($file, $i+1, $l);
          return $ext;
      }
+
+     /* =============================================
+    
+        XiON_checkForReport($mysql_connection, $recipe, $user_id, $display)
+        
+        values
+            $mysql_connection - (mysql_connect) the connectiong to the database
+            $recipe - (integer) the recipe id to look up
+            $user_id - (integer) only used if $display is true
+            $display - (boolean) whether to display the flag option for a post
+        description
+            returns an image if
+            
+    */
+    
+     function XiON_checkForReport($mysql_connection, $recipe, $user_id, $display)
+     {
+         $getRecipes = "SELECT * FROM flags WHERE recipe_id='" . $recipe . "' AND status='Open'";
+         $getRecipesResult = @mysqli_query($mysql_connection, $getRecipes);
+
+         $numberOfFlags = mysqli_num_rows($getRecipesResult);
+
+         if ($numberOfFlags > 2)
+         {
+            $hideRecipe = "UPDATE recipes SET visible = '0' WHERE post_id='" . $recipe . "'";
+            $hideRecipeQuery = @mysqli_query($mysql_connection, $hideRecipe);
+         }
+
+         if ($display == 1)
+         {
+            $flagNotFound = 1;
+
+            if ($numberOfFlags > 0)
+            {
+                for ($i = 0; $i < $numberOfFlags; $i++)
+                {
+                    $myFlag = mysqli_fetch_array($getRecipesResult);
+
+                    if ($myFlag['user_id'] == XiON_getUserIDFromSession($mysql_connection))
+                    {
+                        $flagNotFound = 0;
+                    }
+                }
+            }
+            if ($flagNotFound == 1)
+            {
+                return "<a href=\"" . $_SERVER['REQUEST_URI'] . "&action=flag\"><img src=\"imgs/sys/flag.png\" width=\"30\" /></a>";
+            }
+         }
+         else
+         {
+            if ($numberOfFlags > 0)
+            {
+                return "<img src=\"imgs/sys/warning.png\" width=\"20\"/> ";
+            }
+         }
+     }
 ?>
