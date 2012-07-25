@@ -152,6 +152,18 @@ html, body
     -webkit-border-radius: 10px 10px 10px 10px;
 }
 
+.left_side
+{
+    width: 50%;
+    float: left;
+}
+
+.right_side
+{
+    width: 50%;
+    float: right;
+}
+
 #content ol
 {
     margin-left: 30px;

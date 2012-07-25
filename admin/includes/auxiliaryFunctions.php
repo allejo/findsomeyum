@@ -280,15 +280,15 @@
 
         for ($s = 0; $s < $fullStars; $s++)
         {
-            $starRating .= "<img src=\"./imgs/star_s.png\" />";
+            $starRating .= "\n                           <img src=\"./imgs/star_s.png\" />";
         }
         if ($halfStars > 0)
         {
-            $starRating .= "<img src=\"./imgs/star_s_half.png\" />";
+            $starRating .= "\n                           <img src=\"./imgs/star_s_half.png\" />";
         }
         for ($s = 0; $s < $emptyStars; $s++)
         {
-            $starRating .= "<img src=\"./imgs/star_s_empty.png\" />";
+            $starRating .= "\n                           <img src=\"./imgs/star_s_empty.png\" />";
         }
 
         return $starRating;
@@ -376,12 +376,18 @@
         for ($i = 0; $i < $getCommentsCount; $i++)
         {
             $getComments = mysqli_fetch_array($getCommentsResult);
-            echo "<small>by " . XiON_getUserProfileStylized($mysql_connection, XiON_getUsernameFromID($mysql_connection, $getComments['user_id']), 1) . "</small><br />" . $getComments['content'] . "<br /><br />
-            <small><em>posted on " . $getComments['date_posted'] . "</em></small><br /><br />";
+            echo "\n                    <small>by " . XiON_getUserProfileStylized($mysql_connection, XiON_getUsernameFromID($mysql_connection, $getComments['user_id']), 1) . "</small>
+                    <br />" . $getComments['content'] . "
+                    <br />
+                    <br />
+                    <small><em>posted on " . $getComments['date_posted'] . "</em></small>
+                    <br />
+                    <br />";
 
             if ($i + 1 != $getCommentsCount)
             {
-                echo "<hr /><br />";
+                echo "\n                    <hr />
+                    <br />";
             }
         }
     }
@@ -473,7 +479,7 @@
             }
             if ($flagNotFound == 1)
             {
-                return "<a href=\"" . $_SERVER['REQUEST_URI'] . "&action=flag\"><img src=\"imgs/sys/flag.png\" width=\"30\" /></a>";
+                return "                        <a href=\"" . $_SERVER['REQUEST_URI'] . "&action=flag\"><img src=\"imgs/sys/flag.png\" width=\"30\" /></a>";
             }
          }
          else

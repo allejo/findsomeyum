@@ -23,8 +23,8 @@
                     <h6>
                         <a href="./terms.php">Site Terms of Use</a>  |  <a href="./privacy.php">Privacy Policy</a>
                     </h6>
-                 </div>
-            </div>
-        </div>
+                 </div> <!-- End #copyright -->
+            </div> <!-- End .footer -->
+        </div> <!-- End .wrapper -->
     </body>
 </html>

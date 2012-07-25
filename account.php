@@ -43,7 +43,7 @@
 	    		<tr>
 	    			<td><a href="#"><img src="./imgs/sys/search.png" /></a></td>
 	    			<td><a href="profile.php?user=<?php echo XiON_getUserIDFromSession($dbc); ?>"><img src="./imgs/sys/user.png" /></a></td>
-	    			<td><a href="myprofile.php"><img src="./imgs/sys/gear.png" /></a></td>
+	    			<td><a href="ucp.php"><img src="./imgs/sys/gear.png" /></a></td>
 	    		</tr>
 	    		<tr>
 	    			<td>Search (Coming Soon)</td>

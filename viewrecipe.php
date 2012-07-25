@@ -115,48 +115,95 @@
     include("includes/header.php");
     include("includes/menubar.php");
     
-    echo "<div id=\"content\">
-        <div class=\"viewrecipe\">";
-    echo "<div class=\"buttons\">";
+    echo "            <div id=\"content\">
+                <div class=\"viewrecipe\">
+                    <div class=\"buttons\">\n";
     if (session_is_registered(ns_username))
     {
         echo XiON_checkForReport($dbc, $recipeID, XiON_getUserIDFromSession($dbc), 1);
 
         if ($recipeData['user_id'] ==  XiON_getUserIDFromSession($dbc) || ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev" || $_SESSION["ns_userType"] == "moderator"))
         {
-            echo "<a href=\"editrecipe.php?recipeid=" . $recipeID . "\"><img src=\"imgs/sys/pencil.png\" width=\"30\" /></a>";
-            echo "<img src=\"imgs/sys/delete.png\" width=\"30\" />";
+            echo "\n                        <a href=\"editrecipe.php?recipeid=" . $recipeID . "\"><img src=\"imgs/sys/pencil.png\" width=\"30\" /></a>
+                        <a href=\"deleterecipe.php?recipeid=" . $recipeID ."\"><img src=\"imgs/sys/delete.png\" width=\"30\" /></a>";
         }
 
-        echo "</div>";
-    }
-    echo "<span class=\"title\">" . XiON_checkForReport($dbc, $recipeID, null, 0) . $recipeData['title'] . "</span> <span class=\"category\">[" . $recipeData['category'] . "]</span> <br />\n";
-    echo "<div class=\"author\">by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $recipeData['user_id']), 1) . "</div> <!-- End .author -->\n";
-    echo "<div class=\"rating\">" . XiON_getStarRating($dbc, XiON_getRating($dbc, $recipeID)) . " <small>(" . XiON_getRating($dbc, $recipeID) . " / 5)</small></div> <!-- End .rating --><br /><br />\n";
-    
-    if ($recipeData['images'] != "")
-    {
-        echo "<div class=\"image\"><img src=\"imgs/recipes/" . $recipeData['images'] . "\" /></div><br /> <!-- End .image -->";
+        echo "\n                    </div> <!-- End .buttons -->\n";
     }
     else
     {
-        echo "<!-- No Image Available Embedded --><br />";
+        echo "                        <!-- No buttons available -->
+                    </div> <!-- End .buttons -->\n";
+    }
+    echo "\n                    <span class=\"title\">" . XiON_checkForReport($dbc, $recipeID, null, 0) . $recipeData['title'] . "</span>
+                    <span class=\"category\">[" . $recipeData['category'] . "]</span>
+                    <br />\n";
+    echo "\n                    <div class=\"author\">
+                        by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $recipeData['user_id']), 1) . "
+                    </div> <!-- End .author -->\n\n";
+    echo "                    <div class=\"rating\">" . XiON_getStarRating($dbc, XiON_getRating($dbc, $recipeID)) . " 
+                       <small>(" . XiON_getRating($dbc, $recipeID) . " / 5)</small>
+                    </div> <!-- End .rating -->
+
+                    <br />
+                    <br />\n";
+    
+    if ($recipeData['images'] != "")
+    {
+        echo "\n                    <div class=\"image\">
+                        <img src=\"imgs/recipes/" . $recipeData['images'] . "\" />
+                    </div> <!-- End .image -->
+
+                    <br />\n";
+    }
+    else
+    {
+        echo "\n                    <!-- No Image Available Embedded -->
+
+                    <br />\n";
     }
 
     if ($recipeData['youtube'] != "")
     {
-        echo "<iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/" . $recipeData['youtube'] . "?wmode=opaque\" frameborder=\"0\" allowfullscreen></iframe><br /><br /><br />";
+        echo "\n                    <iframe width=\"560\" height=\"315\" src=\"http://www.youtube.com/embed/" . $recipeData['youtube'] . "?wmode=opaque\" frameborder=\"0\" allowfullscreen></iframe>
+                    <br />
+                    <br />
+                    <br />\n";
     }
     else
     {
-        echo "<!-- No YouTube Video Embedded --><br />";
+        echo "\n                    <!-- No YouTube Video Embedded -->
+                    <br />
+                    <br />
+                    <br />\n";
     }
-    echo "<strong>Difficulty</strong>: " . $recipeData['difficulty']. " | <strong>Prep Time</strong>: " . $recipeData['prep_time'] . " minutes | <strong>Cook Time</strong>: " . $recipeData['cook_time'] . " minutes<br /><br />";
-    echo "<strong>Ingredients</strong>: <br />" . nl2br($recipeData['ingredients']) . "<br /><br />";
-    echo "<strong>Directions</strong>: <br />" . nl2br($recipeData['directions']) . "<br /><br />";
+    echo "\n                    <strong>Difficulty</strong>: " . $recipeData['difficulty']. " | 
+                    <strong>Prep Time</strong>: " . $recipeData['prep_time'] . " minutes |
+                    <strong>Cook Time</strong>: " . $recipeData['cook_time'] . " minutes
+                    <br />
+                    <br />\n";
+    echo "\n                    <strong>Ingredients</strong>:
+                    <br />
+<!-- \/ All the ingredients \/ -->
+" . nl2br($recipeData['ingredients']) . "
+<!-- /\ All the ingredients /\ -->
+                    <br />
+                    <br />\n";
+    echo "\n                    <strong>Directions</strong>:
+                    <br />
+<!-- \/ All the directions \/ -->
+" . nl2br($recipeData['directions']) . "
+<!-- /\ All the directions /\ -->
+                    <br />
+                    <br />\n";
     if ($recipeData['notes'] != "")
     {
-        echo "<strong>Notes</strong>: <br />" . nl2br($recipeData['notes']) . "<br />";
+        echo "\n                    <strong>Notes</strong>:
+                    <br />
+<!-- \/ All the notes \/ -->
+" . nl2br($recipeData['notes']) . "
+<!-- /\ All the notes /\ -->
+                    <br />\n";
     }
 
     if(session_is_registered(ns_username))
@@ -177,33 +224,45 @@
 	    else
 	    {
 ?>
-        <br /><h3>Your Rating</h3>
-        <div id="giveRating">
-	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=1"><img id="star1" src="imgs/transparent.gif" width="40" height="40" /></a>
-	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=2"><img id="star2" src="imgs/transparent.gif" width="40" height="40" /></a>
-	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=3"><img id="star3" src="imgs/transparent.gif" width="40" height="40" /></a>
-	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=4"><img id="star4" src="imgs/transparent.gif" width="40" height="40" /></a>
-	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=5"><img id="star5" src="imgs/transparent.gif" width="40" height="40" /></a>
-    	</div><br />
+                    <br />
+                    <h3>Your Rating</h3>
+                    <div id="giveRating">
+            	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=1"><img id="star1" src="imgs/transparent.gif" width="40" height="40" /></a>
+            	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=2"><img id="star2" src="imgs/transparent.gif" width="40" height="40" /></a>
+            	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=3"><img id="star3" src="imgs/transparent.gif" width="40" height="40" /></a>
+            	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=4"><img id="star4" src="imgs/transparent.gif" width="40" height="40" /></a>
+            	    	<a href="<?php echo $_SERVER['REQUEST_URI']; ?>&action=rating&value=5"><img id="star5" src="imgs/transparent.gif" width="40" height="40" /></a>
+                	</div>
+                    <br />
 <?php
 		}
 ?>
-        <br /><h3>Comments</h3>
-        <form method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?>&action=comment"><br />
-        <textarea id="formatted" name="comment" rows="10" cols="80" /></textarea><br /><br />
-        <input type="hidden" name="submitted" value="TRUE" />
-        <input id="formatted" type="submit" value="Comment" />
-        </form><br /><br />
+                    <br />
+                    <h3>Comments</h3>
+                    <form method="POST" action="<?php echo $_SERVER['REQUEST_URI']; ?>&action=comment"><br />
+                        <textarea id="formatted" name="comment" rows="10" cols="80" /></textarea><br /><br />
+                        <input type="hidden" name="submitted" value="TRUE" />
+                        <input id="formatted" type="submit" value="Comment" />
+                    </form>
+                    <br />
+                    <br />
 <?php
     }
     else
     {
-        echo "<br /><div class=\"login\">Please <a href=\"#login-box\" class=\"download_button orange links login-window\">login</a> or <a href=\"#register-box\" class=\"download_button orange links login-window\">register</a> to comment and to rate.</div><br /><br />";
+        echo "                    <br />
+
+                    <div class=\"login\">
+                        Please <a href=\"#login-box\" class=\"download_button orange links login-window\">login</a> or <a href=\"#register-box\" class=\"download_button orange links login-window\">register</a> to comment and to rate.
+                    </div>
+
+                    <br />
+                    <br />\n";
     }
 ?>
     
 <?php
-    echo "\n<!-- Start printing out comments -->\n";
+    echo "                    <!-- Start printing out comments -->\n";
 
     if (XiON_getCommentsCount($dbc, "recipe", $recipeID) != 0)
     {
@@ -211,11 +270,13 @@
     }
     else
     {
-        echo "<em>No Comments</em>";
+        echo "                    <em>No Comments</em>";
     }
     
-    echo "</div> <!-- End .viewrecipe -->
-    </div> <!-- #content -->";
+    echo "\n
+                    <!-- End printing out comments -->
+                </div> <!-- End .viewrecipe -->
+            </div> <!-- #content -->\n";
     
     include("includes/footer.php");
 ?>

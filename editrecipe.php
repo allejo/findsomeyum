@@ -18,13 +18,18 @@
     {
         header("location:login.php");
     }
-    
+
     require_once('admin/includes/mysql_connection.php');
     require_once('admin/includes/auxiliaryFunctions.php');
 
     $recipeID = $_GET['recipeid'];
     $recipeID = stripslashes($recipeID);
     $recipeID = mysqli_real_escape_string($dbc, $recipeID);
+    
+    if ($recipeData['user_id'] !=  XiON_getUserIDFromSession($dbc) && ($_SESSION["ns_userType"] != "admin" && $_SESSION["ns_userType"] != "editor" && $_SESSION["ns_userType"] != "systemDev" && $_SESSION["ns_userType"] != "moderator"))
+    {
+        header("location:viewrecipe.php?recipeid=$recipeID");
+    }
 
     if (isset($_POST['submitted']))
     {
@@ -168,13 +173,15 @@
 
         if (empty($errors))
         {
+            $last_editor = XiON_getUsernameFromSession();
+
             if ($image_name != "")
             {
                 $updateNewImage = "UPDATE recipes SET images = '$image_name' WHERE post_id='" . $recipeID . "' LIMIT 1";
                 $updateNewImageQuery = @mysqli_query($dbc, $updateNewImage);
             }
 
-            $updateRecipeQuery = "UPDATE recipes SET category = '$category', title = '$title', youtube = '$youtube', difficulty = '$difficulty', prep_time = '$prep_time', cook_time = '$cook_time', description = '$description', ingredients = '$ingredients', directions = '$directions', notes = '$notes', date_edited=NOW() WHERE post_id='" . $recipeID . "'";
+            $updateRecipeQuery = "UPDATE recipes SET category = '$category', title = '$title', youtube = '$youtube', difficulty = '$difficulty', prep_time = '$prep_time', cook_time = '$cook_time', description = '$description', ingredients = '$ingredients', directions = '$directions', notes = '$notes', date_edited=NOW(), last_edit_by = '$last_editor' WHERE post_id='" . $recipeID . "'";
             $updateRecipeQueryResult = @mysqli_query($dbc, $updateRecipeQuery) OR die ("Error: " . mysqli_error($dbc));
             
             if ($updateRecipeQueryResult)
@@ -202,7 +209,7 @@
     {       
         include("includes/header.php");
         include("includes/menubar.php");
-        echo "<div id=\"content\">";
+        echo "            <div id=\"content\">";
     }
 
     $getAllRecipeData = "SELECT * FROM recipes WHERE post_id='" . $recipeID . "'";

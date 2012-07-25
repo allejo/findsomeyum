@@ -137,7 +137,7 @@
 			if (($extension != "jpg") && ($extension != "jpeg") && ($extension != "png") && ($extension != "gif")) 
 			{
 				//Unknown extension
-				$error[] = 'Invalid file type uploaded';
+				$errors[] = 'Invalid file type uploaded';
 			}
 			else
 			{
@@ -146,18 +146,25 @@
 				if ($size > MAX_SIZE*1024)
 				{
 					//Over the size limit
-					$error[] = 'Image select is too large to upload';
+					$errors[] = 'Image select is too large to upload';
 				}
 		
 				//we will give an unique name, for example the time in unix time format
 				$image_name = time() . '.' . $extension;
 				$newname="imgs/recipes/" . $image_name;
 				$copied = copy($_FILES['image']['tmp_name'], $newname);
-				
-				if (!$copied) 
+
+                list($width, $height, $type, $attr) = getimagesize($newname);
+
+                if ($width > 800 || $height > 600)
+                {
+                    $errors[] = 'Image dimensions cannot exceed 800x600 pixels';
+                    unlink($newname);
+                }
+				if (!$copied)
 				{
 					//Something went wrong
-					$error[] = 'An unknown error has occured while uploading the image.';
+					$errors[] = 'An unknown error has occured while uploading the image.';
 				}
 			}
 		}
@@ -168,7 +175,7 @@
 	        $getUserIDResult =  @mysqli_query($dbc, $getUserIDQuery);
 	        $getUserID = mysqli_fetch_array($getUserIDResult);
 	
-	        $addRecipeQuery = "INSERT INTO recipes (post_id, user_id, category, title, youtube, images, difficulty, prep_time, cook_time, description, ingredients, directions, notes, date_posted, date_edited, ipAddress) VALUES (NULL, '$getUserID[0]', '$category', '$title', '$youtube', '$image_name', '$difficulty', '$prep_time', '$cook_time', '$description', '$ingredients', '$directions', '$notes', NOW(), NOW(), '$userIP')";
+	        $addRecipeQuery = "INSERT INTO recipes (post_id, user_id, category, title, youtube, images, difficulty, prep_time, cook_time, description, ingredients, directions, notes, date_posted, date_edited, last_activity, ipAddress) VALUES (NULL, '$getUserID[0]', '$category', '$title', '$youtube', '$image_name', '$difficulty', '$prep_time', '$cook_time', '$description', '$ingredients', '$directions', '$notes', NOW(), NOW(), NOW(), '$userIP')";
 	        $addRecipeResult = @mysqli_query($dbc, $addRecipeQuery) OR die ("Line 1 Error: " . mysqli_error($dbc));
 	        $getLastInsertedRow = "SELECT post_id FROM recipes ORDER BY post_id DESC LIMIT 1";
 	        $getLastInsertedRowResult = @mysqli_query($dbc, $getLastInsertedRow) OR die ("Error: " . mysqli_error($dbc));

@@ -30,7 +30,7 @@
 	    else
 	    	echo "<a href=\"\" class=\"links\" style=\"color: yellow;\">Register</a>";
 	    	
-        echo "<a href=\"#login-box\" class=\"links login-window\" style=\"color: yellow;\">Log In</a>";
+        echo "\n                <a href=\"#login-box\" class=\"links login-window\" style=\"color: yellow;\">Log In</a>";
     }
     else
     {
@@ -54,18 +54,18 @@
             echo "\n                <a href=\"./{$menuBarLinksGlobal[$page][1]}\" class=\"links\">{$menuBarLinksGlobal[$page][0]}</a>";
     }
     
-    echo "\n            </div>\n";
+    echo "\n            </div> <!-- End #topMenuBar -->\n\n";
 
     if ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev" || $_SESSION["ns_userType"] == "moderator")
     {
-        echo "<div id=\"content\">";
+        echo "            <div id=\"content\">";
         
         if ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev")
         {
-            echo "<small><strong><a href=\"admin/login.php\" target=\"_blank\">[Adminstrator Control Panel]</a></strong></small> ";
+            echo "\n                <small><strong><a href=\"admin/login.php\" target=\"_blank\">[Adminstrator Control Panel]</a></strong></small> ";
         }
 
-        echo "<small><strong><a href=\"modcp.php\">[Moderator Control Panel]</a></strong></small></h6>";
-        echo "</div>";
+        echo "\n                <small><strong><a href=\"modcp.php\">[Moderator Control Panel]</a></strong></small>
+            </div>\n\n";
     }
 ?>

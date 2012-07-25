@@ -40,121 +40,13 @@
         <title>FindSomeYum: <?php echo $row[1]; ?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
+        <script type="text/javascript" src="./includes/javascript.js"></script>
+        <script type="text/javascript" src="./includes/datetimepicker.js"></script>
         <link rel="stylesheet" type="text/css" href="./includes/buttons.css" />
         <link rel="stylesheet" type="text/css" href="./includes/jquery.css" />
         <link rel="stylesheet" type="text/css" href="./includes/styles.css" />
         <link rel="apple-touch-icon" href="./imgs/iFSY.jpg" />
     </head>
-    
-    <script>
-        $(document).ready(function()
-        {
-            $('a.login-window').click(function()
-            {
-                //Getting the variable's value from a link 
-                var loginBox = $(this).attr('href');
-                
-                //Fade in the Popup
-                $(loginBox).fadeIn(300);
-                
-                //Set the center alignment padding + border see css style
-                var popMargTop = ($(loginBox).height() + 24) / 2; 
-                var popMargLeft = ($(loginBox).width() + 24) / 2; 
-                
-                $(loginBox).css({ 
-                    'margin-top' : -popMargTop,
-                    'margin-left' : -popMargLeft
-                });
-                
-                // Add the mask to body
-                $('body').append('<div id="mask"></div>');
-                $('#mask').fadeIn(300);
-                
-                return false;
-            });
-            
-            // When clicking on the button close or the mask layer the popup closed
-            $('a.close, #mask').live('click', function()
-            { 
-                $('#mask , .login-popup').fadeOut(300 , function()
-                {
-                    $('#mask').remove();  
-                }); 
-            
-                return false;
-            });
-            
-            // star 1
-            $('#star1').mouseover(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m.png")');
-            });
-            $('#star1').mouseout(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
-            });
-            
-            // star 2
-            $('#star2').mouseover(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m.png")');
-                $('#star2').css('background', 'url("imgs/star_m.png")');
-            });
-            $('#star2').mouseout(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star2').css('background', 'url("imgs/star_m_empty.png")');
-            });
-            
-            // star 3
-            $('#star3').mouseover(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m.png")');
-                $('#star2').css('background', 'url("imgs/star_m.png")');
-                $('#star3').css('background', 'url("imgs/star_m.png")');
-            });
-            $('#star3').mouseout(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star2').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star3').css('background', 'url("imgs/star_m_empty.png")');
-            });
-            
-            // star 4
-            $('#star4').mouseover(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m.png")');
-                $('#star2').css('background', 'url("imgs/star_m.png")');
-                $('#star3').css('background', 'url("imgs/star_m.png")');
-                $('#star4').css('background', 'url("imgs/star_m.png")');
-            });
-            $('#star4').mouseout(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star2').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star3').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star4').css('background', 'url("imgs/star_m_empty.png")');
-            });
-            
-            // star 5
-            $('#star5').mouseover(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m.png")');
-                $('#star2').css('background', 'url("imgs/star_m.png")');
-                $('#star3').css('background', 'url("imgs/star_m.png")');
-                $('#star4').css('background', 'url("imgs/star_m.png")');
-                $('#star5').css('background', 'url("imgs/star_m.png")');
-            });
-            $('#star5').mouseout(function()
-            {
-                $('#star1').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star2').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star3').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star4').css('background', 'url("imgs/star_m_empty.png")');
-                $('#star5').css('background', 'url("imgs/star_m_empty.png")');
-            });
-        });
-    </script>
     
     <script type="text/javascript">
         var _gaq = _gaq || [];
@@ -174,7 +66,7 @@
         if (!session_is_registered(ns_username))
         {
     ?>
-        <div id="login-box" class="login-popup">
+    <div id="login-box" class="login-popup">
             <a href="#" class="close"><img src="imgs/close_pop.png" style="margin-left: 320px" class="btn_close" title="Close Window" alt="Close" /></a>
             <form method="post" class="signin" action="includes/checklogin.php">
                 <fieldset class="textbox">
@@ -190,13 +82,16 @@
                     <input type="submit" name="Submit" value="Login">
                 </fieldset>
             </form>
-        </div>
+        </div> <!-- End #login-box -->
+
 <?php
 	if (!strstr($_SERVER['PHP_SELF'], "register.php"))
 	{
 ?>
         <div id="register-box" class="login-popup">
-            <a href="#" class="close"><img src="imgs/close_pop.png" style="margin-left: 320px" class="btn_close" title="Close Window" alt="Close" /></a>
+            <a href="#" class="close">
+            	<img src="imgs/close_pop.png" style="margin-left: 320px" class="btn_close" title="Close Window" alt="Close" />
+            </a>
             <form method="post" class="signin" action="includes/register.php">
                 <fieldset class="textbox">
                     <label class="username">
@@ -215,20 +110,24 @@
                         <span>Confirm Password</span>
                         <input name="pass2" type="password" id="pass2" placeholder="Confirm Password">
                     </label>
+                    <!-- Google reCaptcha Start -->
                     <?php
                         require_once('../captcha/recaptchalib.php');
                         $publickey = "6Lc5-NMSAAAAAFeAgEf4CpV3J5ijBHix1NrKky5E";
                         echo recaptcha_get_html($publickey);
                     ?>
+
+                    <!-- Google reCaptcha End-->
                     <br />
                     <input type="submit" name="Submit" value="Register">
                 </fieldset>
             </form>
-        </div>
+        </div> <!-- End #register-box -->
     <?php
     	}
         }
     ?>
-        <div id="wrapper">
+
+    	<div id="wrapper">
             <div id="topMenuBar">
                 <a href="index.php" class="logo"><img src="./imgs/findsomeyum_logo.png" height="80"></a>
