@@ -21,21 +21,37 @@
     
     $getRecipes = "SELECT post_id FROM recipes ORDER BY last_activity ASC";
     $getRecipesQuery = @mysqli_query($dbc, $getRecipes) OR die ("Error: " . mysqli_query($dbc));
-    $recipes = mysqli_fetch_array($getRecipesQuery);
     $recipeCount = mysqli_num_rows($getRecipesQuery);
     
     $mostPopularRecipe = 0;
     $mostPopularNumberOfRatings = 0;
+    $mostPopularAverage = 0;
     
     for ($j = 0; $j < $recipeCount; $j++)
     {
-	    $getRatingCount = "SELECT count(*) FROM ratings WHERE recipe_id = '" . $recipes[$j] . "'";
+    	$recipes = mysqli_fetch_array($getRecipesQuery);
+	    $getRatingCount = "SELECT value FROM ratings WHERE recipe_id = '" . $recipes[0] . "'";
 	    $getRatingCountQuery = @mysqli_query($dbc, $getRatingCount);
+	    $numberOfRatings = mysqli_num_rows($getRatingCountQuery);
 	    
-	    if ($getRatingCountQuery > $mostPopularNumberOfRatings)
+	    $totalRating = 0;
+	    
+	    for ($i = 0; $i < $numberOfRatings; $i++)
 	    {
-		    $mostPopularNumberOfRatings = $getRatingCountQuery;
-		    $mostPopularRecipe = $recipes[$j];
+		    $getRatingTotal = mysqli_fetch_array($getRatingCountQuery);
+		    $totalRating += $getRatingTotal[0];
+	    }
+	    
+	    if ($numberOfRatings > 0)
+		    $averageRating = $totalRating / $numberOfRatings;
+		else
+			$averageRating = 0;
+			
+	    if ($numberOfRatings > $mostPopularNumberOfRatings && $averageRating >= $mostPopularAverage)
+	    {
+	    	$mostPopularAverage = $averageRating;
+		    $mostPopularNumberOfRatings = $numberOfRatings;
+		    $mostPopularRecipe = $recipes[0];
 	    }
     }
     
