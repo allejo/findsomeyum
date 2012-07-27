@@ -178,6 +178,13 @@ h2 a
     padding: 10px 10px;
 }
 
+#featured .description .desc
+{
+    overflow: hidden;
+    max-height: 92px;
+    word-wrap: break-word;
+}
+
 #content
 {
     margin: 10px auto;

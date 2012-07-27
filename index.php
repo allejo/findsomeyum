@@ -16,23 +16,49 @@
     
     include("includes/header.php");
     include("includes/menubar.php");
+    require_once('admin/includes/mysql_connection.php');
+    require_once('admin/includes/auxiliaryFunctions.php');
+    
+    $getRecipes = "SELECT post_id FROM recipes ORDER BY last_activity ASC";
+    $getRecipesQuery = @mysqli_query($dbc, $getRecipes) OR die ("Error: " . mysqli_query($dbc));
+    $recipes = mysqli_fetch_array($getRecipesQuery);
+    $recipeCount = mysqli_num_rows($getRecipesQuery);
+    
+    $mostPopularRecipe = 0;
+    $mostPopularNumberOfRatings = 0;
+    
+    for ($j = 0; $j < $recipeCount; $j++)
+    {
+	    $getRatingCount = "SELECT count(*) FROM ratings WHERE recipe_id = '" . $recipes[$j] . "'";
+	    $getRatingCountQuery = @mysqli_query($dbc, $getRatingCount);
+	    
+	    if ($getRatingCountQuery > $mostPopularNumberOfRatings)
+	    {
+		    $mostPopularNumberOfRatings = $getRatingCountQuery;
+		    $mostPopularRecipe = $recipes[$j];
+	    }
+    }
+    
+    $featuredRecipeQuery = "SELECT * FROM recipes WHERE post_id='" . $mostPopularRecipe . "'";
+    $featuredRecipeResult = @mysqli_query($dbc, $featuredRecipeQuery);
+    $featuredRecipe = mysqli_fetch_array($featuredRecipeResult);
 ?>
             <center><input id="search" type="text" name="search" /></center>
 
             <div id="featured">
-                <img src="http://www.italian-food.us/vealsaltimboccalarge.jpg">
+                <img src="imgs/recipes/<?php echo $featuredRecipe['images']; ?>">
                 
                 <div class="description">
-                    <a href="#"><h1>Some Amazing Salad</h1></a>
-                    by <a href="#">allejo</a>
+                    <a href="viewrecipe.php?recipeid=<?php echo $featuredRecipe['post_id']; ?>"><h1><?php echo $featuredRecipe['title']; ?></h1></a>
+                    by <?php echo XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $featuredRecipe['user_id']), 1); ?>
                     <br />
                     <br />
-                    <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut posuere tellus. In non quam a orci pellentesque varius. Integer vitae ligula id urna imperdiet lacinia sit amet sed diam. Sed eu turpis pretium libero dignissim hendrerit quis in urna. Aenean nec nulla neque. Phasellus sit amet mauris nibh, vel dapibus velit. Integer vulputate bibendum felis consectetur pretium. Nulla et enim mi. Phasellus elementum enim et tellus tincidunt suscipit ultricies leo feugiat. Maecenas enim tortor.
+                    <p class="desc">
+<?php echo $featuredRecipe['description']; ?>
                     </p>
                     
                     <div class="recipeBtn">
-                        <a href="#" class="download_button orange">See the recipe</a>
+                        <a href="viewrecipe.php?recipeid=<?php echo $featuredRecipe['post_id']; ?>" class="download_button orange">See the recipe</a>
                     </div>
                 </div>
             </div>
