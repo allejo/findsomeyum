@@ -479,14 +479,14 @@
             }
             if ($flagNotFound == 1)
             {
-                return "                        <a href=\"" . $_SERVER['REQUEST_URI'] . "&action=flag\"><img src=\"imgs/sys/flag.png\" width=\"30\" /></a>";
+                return "                        <a href=\"" . $_SERVER['REQUEST_URI'] . "&action=flag\"><img src=\"imgs/sys/flag.png\" width=\"30\" alt=\"Flag Recipe\"/></a>";
             }
          }
          else
          {
             if ($numberOfFlags > 0)
             {
-                return "<img src=\"imgs/sys/warning.png\" width=\"20\"/> ";
+                return "<img src=\"imgs/sys/warning.png\" width=\"20\" alt=\"Post is Flagged\"/> ";
             }
          }
      }

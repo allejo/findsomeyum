@@ -17,11 +17,10 @@
     
     $menuBarLinksGlobal = array(
         0 => array (0 => "FSY Program", 1 => "fsyprogram.php"),
-        1 => array (0 => "Tutorials", 1 => "tutorials.php"),
-        2 => array (0 => "Recipes", 1 => "recipes.php"),
-        3 => array (0 => "Blog", 1 => "blog.php"),
-        4 => array (0 => "About", 1 => "about.php"),
-        5 => array (0 => "Index", 1 => "index.php"));
+        1 => array (0 => "Recipes", 1 => "recipes.php"),
+        2 => array (0 => "Blog", 1 => "blog.php"),
+        3 => array (0 => "About", 1 => "about.php"),
+        4 => array (0 => "Index", 1 => "index.php"));
     
     if (!session_is_registered(ns_username))
     {

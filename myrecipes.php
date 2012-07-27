@@ -66,8 +66,8 @@
         $row = mysqli_fetch_array($myRecipesResult);
         echo "\n                    <tr>
                         <td><div class=\"rating\"><a style=\"float: left\" href=\"viewrecipe.php?recipeid=" . $row['post_id'] . "\">" . $row['title'] . "</a> " . XiON_getStarRating($dbc, XiON_getRating($dbc, $row['post_id'])) . "</td></div>
-                        <td><a href=\"myrecipes.php?action=edit&recipeid=$row[0]\">Edit</a></td>
-                        <td><a href=\"myrecipes.php?action=delete&recipeid=$row[0]\">Delete</a></td>
+                        <td><a href=\"editrecipe.php?recipeid=" . $row['post_id'] . "\"><img src=\"imgs/sys/pencil.png\" width=\"30\" /></a></td>
+                        <td><a href=\"deleterecipe.php?recipeid=" . $recipeID ."\"><img src=\"imgs/sys/delete.png\" width=\"30\" /></a></td>
                     </tr>";
     }
     echo "\n                </table>\n                <br />\n                <br />";

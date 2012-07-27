@@ -61,21 +61,21 @@
         $searchList = explode(",", $searchItem);
         for ($i = 0; $i < count($searchList); $i++)
         {
-            $sqlList .= " name LIKE '%$searchList[$i]%' OR description LIKE '%$searchList[$i]%' OR brand LIKE '%$searchList[$i]%' OR information LIKE '%$searchList[$i]%'";
+            $sqlList .= " title LIKE '%$searchList[$i]%' OR category LIKE '%$searchList[$i]%' OR description LIKE '%$searchList[$i]%' OR ingredients LIKE '%$searchList[$i]%' OR directions LIKE '%$searchList[$i]%' OR notes LIKE '%$searchList[$i]%'";
             if ($i+1 < count($searchList))
             {
                 $sqlList .= " OR ";
             }
         }
         
-        $query = "SELECT count(*) FROM products WHERE $sqlList";
+        $query = "SELECT count(*) FROM recipes WHERE $sqlList";
         $result = mysqli_query($dbc, $query) OR die ("Error: " . mysqli_error($dbc));
         $query_data = mysqli_fetch_row($result);
         $numrows = $query_data[0];
         $rows_per_page = 15;
         $lastpage = ceil($numrows/$rows_per_page);
     
-        $searchQuery = "SELECT * FROM products WHERE $sqlList ORDER BY price ASC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
+        $searchQuery = "SELECT * FROM recipes WHERE $sqlList ORDER BY date_posted ASC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
         $run_query = @mysqli_query($dbc, $searchQuery) OR die ("sql error: " . mysqli_error($dbc));
         $numberOfRows = mysqli_num_rows($run_query);
     
@@ -84,25 +84,21 @@
         if ($pageno < 1) { $pageno = 1; }
         if ($lastpage == 0) { $lastpage += 1; }
         
-        echo "                <table  width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\">
+        echo "<div id=\"content\">
+                        <table  width=\"100%\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\">
                         <tr>
-                            <td><h3>Item</h3></td>
-                            <td><h3>Location</h3></td>
-                            <td><h3>Price</h3></td>
-                            <td></td>
+                            <td><h3>Recipes</h3></td>
+                            <td><h3>Author</h3></td>
+                            <td><h3>Rating</h3></td>
                         </tr>";
         
         for ($i = 0; $i < $numberOfRows; $i++)
         {
             $row = mysqli_fetch_array($run_query);
             echo "\n                    <tr>
-                            <td>
-                                <h4>$row[6] $row[1]<h4><br />
-                                <p>$row[2]</p>
-                            </td>
-                            <td>$row[5]</td>
-                            <td>$row[3]</td>
-                            <td><a href=\"grocerylist.php?action=add&item=$row[0]\">Add to List</a></td>
+                            <td><a style=\"text-decoration: none; color: #C60\" href=\"viewrecipe.php?recipeid=$row[0]\">" . $row['title'] . "</td>
+                            <td>" . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $row[1]), 1) . "</td>
+                            <td>" . XiON_getStarRating($dbc, XiON_getRating($dbc, $row['post_id'])) . "</td>
                         </tr>";
         }
         
@@ -133,7 +129,8 @@
            echo "                     <a href='{$_SERVER['PHP_SELF']}?search={$_GET['search']}&page=$lastpage'>&gt;&gt;</a>\n";
         }
         
-        echo "                </div> <!-- End Pagination -->";
+        echo "                </div> <!-- End Pagination -->
+                        </div> <!-- End #content -->";
     }
     
     include("includes/footer.php");

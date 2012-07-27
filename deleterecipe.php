@@ -33,6 +33,28 @@
 
     if (isset($_POST['submitted']))
     {
+        //Clean up the old images
+        if ($handle = opendir('imgs/recipes/'))
+        {
+            while (false !== ($entry = readdir($handle)))
+            {
+                if ($entry != "." && $entry != "..")
+                {
+                    $checkIfImageIsInUse = "SELECT count(*) FROM recipes WHERE images = '" . $entry . "'";
+                    $checkIfImageIsInUseQuery = @mysqli_query($dbc, $checkIfImageIsInUse) OR die ("Error: " . mysqli_error($dbc));
+                    $isImageInUse = mysqli_fetch_array($checkIfImageIsInUseQuery);
+
+                    if ($isImageInUse[0] == 0 && $entry != "plate.png" && $entry != $image_name)
+                    {
+                        unlink("imgs/recipes/" . $entry);
+                    }
+                }
+            }
+
+            closedir($handle);
+        }
+        //End clean up
+        
         $myAdminUsername = XiON_getUsernameFromSession();
         $adminIP = XiON_getUserIP();
 

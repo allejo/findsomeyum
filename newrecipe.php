@@ -126,7 +126,7 @@
 		
 		if ($image)
 		{
-			define ("MAX_SIZE","100"); 
+			define ("MAX_SIZE","300"); 
 			
 			//get the original name of the file from the clients machine
 			$filename = stripslashes($_FILES['image']['name']);
@@ -171,6 +171,28 @@
 
 		if (empty($errors))
 		{
+            //Clean up the old images
+            if ($handle = opendir('imgs/recipes/'))
+            {
+                while (false !== ($entry = readdir($handle)))
+                {
+                    if ($entry != "." && $entry != "..")
+                    {
+                        $checkIfImageIsInUse = "SELECT count(*) FROM recipes WHERE images = '" . $entry . "'";
+                        $checkIfImageIsInUseQuery = @mysqli_query($dbc, $checkIfImageIsInUse) OR die ("Error: " . mysqli_error($dbc));
+                        $isImageInUse = mysqli_fetch_array($checkIfImageIsInUseQuery);
+
+                        if ($isImageInUse[0] == 0 && $entry != "plate.png" && $entry != $image_name)
+                        {
+                            unlink("imgs/recipes/" . $entry);
+                        }
+                    }
+                }
+
+                closedir($handle);
+            }
+            //End clean up
+
 	        $getUserIDQuery = "SELECT user_id FROM members WHERE username = '" . $_SESSION['ns_username'] . "'";
 	        $getUserIDResult =  @mysqli_query($dbc, $getUserIDQuery);
 	        $getUserID = mysqli_fetch_array($getUserIDResult);
@@ -213,32 +235,34 @@
 ?>
 
     <form method="post" action="newrecipe.php" enctype="multipart/form-data">
-        <input id="formatted" style="width: 585px" name="title" type="text" id="title" placeholder="Title" width="100%" value="<?php if(isset($_POST['title'])) echo $_POST['title']; ?>"/><br /><br />
+        <input id="formatted" style="width: 585px" name="title" type="text" id="title" placeholder="Title*" width="100%" value="<?php if(isset($_POST['title'])) echo $_POST['title']; ?>"/><br /><br />
         <select name="category">
             <option value="">Select Category</option>
-            <option value="Appetizers">Appetizers</option>
-            <option value="Breakfast">Breakfast</option>
-            <option value="Dessert">Dessert</option>
-            <option value="Drinks">Drinks</option>
-            <option value="Main Dish">Main Dish</option>
-            <option value="Salad">Salad</option>
-            <option value="Side Dish">Side Dish</option>
-            <option value="Soup">Soup</option>
-        </select>
+            <option value="Appetizers" <?php if ($_POST['category'] == "Appetizers") echo "selected=\"selected\""; ?>>Appetizers</option>
+            <option value="Breakfast" <?php if ($_POST['category'] == "Breakfast") echo "selected=\"selected\""; ?>>Breakfast</option>
+            <option value="Dessert" <?php if ($_POST['category'] == "Dessert") echo "selected=\"selected\""; ?>>Dessert</option>
+            <option value="Drinks" <?php if ($_POST['category'] == "Drinks") echo "selected=\"selected\""; ?>>Drinks</option>
+            <option value="Main Dish" <?php if ($_POST['category'] == "Main Dish") echo "selected=\"selected\""; ?>>Main Dish</option>
+            <option value="Salad" <?php if ($_POST['category'] == "Salad") echo "selected=\"selected\""; ?>>Salad</option>
+            <option value="Side Dish" <?php if ($_POST['category'] == "Side Dish") echo "selected=\"selected\""; ?>>Side Dish</option>
+            <option value="Soup" <?php if ($_POST['category'] == "Soup") echo "selected=\"selected\""; ?>>Soup</option>
+        </select><span class="error">*</span>
         <select name="difficulty">
             <option value="">Select Difficulty</option>
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Difficult">Difficult</option>
-        </select>
-        Image <input type="file" name="image"><br /><br />
-        http://www.youtube.com/watch?v=<input id="formatted" style="width: 185px" name="youtube" type="text" id="youtube" placeholder="YouTube ID" maxlength="11"/><br /><br />
-        Prep Time <input id="formatted" name="prep_time" type="text" id="prep_time" placeholder="Prep Time (Minutes)" />
-        Cook Time <input id="formatted" name="cook_time" type="text" id="cook_time" placeholder="Cook Time (Minutes)" /><br /><br />
-        Description<br /><textarea id="formatted" name="description" rows="10" cols="80" /></textarea><br /><br />
-        Ingredients<br /><textarea id="formatted" name="ingredients" rows="15" cols="80" /></textarea><br /><br />
-        Directions<br /><textarea id="formatted" name="directions" rows="15" cols="80" /></textarea><br /><br />
-        Notes<br /><textarea id="formatted" name="notes" rows="10" cols="80" /></textarea><br /><br /><br />
+            <option value="Easy" <?php if ($_POST['difficulty'] == "Easy") echo "selected=\"selected\""; ?>>Easy</option>
+            <option value="Medium" <?php if ($_POST['difficulty'] == "Medium") echo "selected=\"selected\""; ?>>Medium</option>
+            <option value="Difficult" <?php if ($_POST['difficulty'] == "Difficult") echo "selected=\"selected\""; ?>>Difficult</option>
+        </select><span class="error">*</span>
+        <br /><br />
+        Image <input type="file" name="image">
+        <br /><em><tt>(Max Image Size: 800x600 pixels | Max File Size: 300Kb)</tt></em><br /><br />
+        http://www.youtube.com/watch?v=<input id="formatted" style="width: 185px" name="youtube" type="text" id="youtube" placeholder="YouTube ID" maxlength="11" value="<?php if(isset($_POST['youtube'])) echo $_POST['youtube']; ?>"/><br /><br />
+        Prep Time<span class="error">*</span> <input id="formatted" name="prep_time" type="text" id="prep_time" placeholder="Prep Time (Minutes)" value="<?php if(isset($_POST['prep_time'])) echo $_POST['prep_time']; ?>"/>
+        Cook Time<span class="error">*</span> <input id="formatted" name="cook_time" type="text" id="cook_time" placeholder="Cook Time (Minutes)" value="<?php if(isset($_POST['cook_time'])) echo $_POST['cook_time']; ?>"/><br /><br />
+        Description<span class="error">*</span><br /><textarea id="formatted" name="description" rows="10" cols="80" /><?php if(isset($_POST['description'])) echo $_POST['description']; ?></textarea><br /><br />
+        Ingredients<span class="error">*</span><br /><textarea id="formatted" name="ingredients" rows="15" cols="80" /><?php if(isset($_POST['ingredients'])) echo $_POST['ingredients']; ?></textarea><br /><br />
+        Directions<span class="error">*</span><br /><textarea id="formatted" name="directions" rows="15" cols="80"  /><?php if(isset($_POST['directions'])) echo $_POST['directions']; ?></textarea><br /><br />
+        Notes<br /><textarea id="formatted" name="notes" rows="10" cols="80" value="<?php if(isset($_POST['notes'])) echo $_POST['notes']; ?>"/></textarea><br /><br /><br />
         <input id="formatted" type="submit" value="Submit" />
         <input type="hidden" name="submitted" value="TRUE" />
     </form>

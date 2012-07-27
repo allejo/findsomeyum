@@ -26,9 +26,22 @@
     $recipeID = stripslashes($recipeID);
     $recipeID = mysqli_real_escape_string($dbc, $recipeID);
     
-    if ($recipeData['user_id'] !=  XiON_getUserIDFromSession($dbc) && ($_SESSION["ns_userType"] != "admin" && $_SESSION["ns_userType"] != "editor" && $_SESSION["ns_userType"] != "systemDev" && $_SESSION["ns_userType"] != "moderator"))
+    $myUserIDData = "SELECT user_id, images FROM recipes WHERE post_id='" . $recipeID . "'";
+    $myUserIDDataQuery = @mysqli_query($dbc, $myUserIDData);
+    $myUserID = mysqli_fetch_array($myUserIDDataQuery);
+
+    if ($myUserID[0] !=  XiON_getUserIDFromSession($dbc) && ($_SESSION["ns_userType"] != "admin" && $_SESSION["ns_userType"] != "editor" && $_SESSION["ns_userType"] != "systemDev" && $_SESSION["ns_userType"] != "moderator"))
     {
         header("location:viewrecipe.php?recipeid=$recipeID");
+    }
+
+    if (isset($_GET['removeImage']))
+    {
+        $deleteImage = "UPDATE recipes SET images = '' WHERE post_id = '" . $recipeID . "'";
+        $deleteImageQuery = @mysqli_query($dbc, $deleteImage);
+
+        unlink("imgs/recipes/" . $myUserID[1]);
+        header("location: editrecipe.php?recipeid=" . $recipeID);
     }
 
     if (isset($_POST['submitted']))
@@ -173,6 +186,28 @@
 
         if (empty($errors))
         {
+            //Clean up the old images
+            if ($handle = opendir('imgs/recipes/'))
+            {
+                while (false !== ($entry = readdir($handle)))
+                {
+                    if ($entry != "." && $entry != "..")
+                    {
+                        $checkIfImageIsInUse = "SELECT count(*) FROM recipes WHERE images = '" . $entry . "'";
+                        $checkIfImageIsInUseQuery = @mysqli_query($dbc, $checkIfImageIsInUse) OR die ("Error: " . mysqli_error($dbc));
+                        $isImageInUse = mysqli_fetch_array($checkIfImageIsInUseQuery);
+
+                        if ($isImageInUse[0] == 0 && $entry != "plate.png" && $entry != $image_name)
+                        {
+                            unlink("imgs/recipes/" . $entry);
+                        }
+                    }
+                }
+
+                closedir($handle);
+            }
+            //End clean up
+
             $last_editor = XiON_getUsernameFromSession();
 
             if ($image_name != "")
@@ -235,10 +270,13 @@
             <option value="Medium" <?php if ($recipeData['difficulty'] == "Medium") echo "selected=\"selected\""; ?>>Medium</option>
             <option value="Difficult" <?php if ($recipeData['difficulty'] == "Difficult") echo "selected=\"selected\""; ?>>Difficult</option>
         </select>
-        Image <input type="file" name="image"><br /><br />
+        <br />
+        <br />
+        <a href="<?php echo $_SERVER['REQUEST_URI'] . "&removeImage=1" ?> "><img src="imgs/sys/delete.png" width="10" alt="Delete Image"/></a> Image <input style="margin-top: 5px" type="file" name="image">
+        <br /><em><tt>(Max Image Size: 800x600 pixels | Max File Size: 300Kb)</tt></em><br /><br />
         http://www.youtube.com/watch?v=<input id="formatted" style="width: 185px" name="youtube" type="text" id="youtube" placeholder="YouTube ID" maxlength="11" value="<?php if (isset($_POST['youtube'])) echo $_POST['youtube']; else echo $recipeData['youtube']; ?>"/><br /><br />
-        Prep Time <input id="formatted" name="prep_time" type="text" id="prep_time" placeholder="Prep Time (Minutes)" value="<?php echo $recipeData['prep_time']; ?>"/>
-        Cook Time <input id="formatted" name="cook_time" type="text" id="cook_time" placeholder="Cook Time (Minutes)" value="<?php echo $recipeData['cook_time']; ?>"/><br /><br />
+        Prep Time <input id="formatted" name="prep_time" type="text" id="prep_time" placeholder="Prep Time (Minutes)" value="<?php if (isset($_POST['prep_time'])) echo $_POST['prep_time']; else echo $recipeData['prep_time']; ?>"/>
+        Cook Time <input id="formatted" name="cook_time" type="text" id="cook_time" placeholder="Cook Time (Minutes)" value="<?php if (isset($_POST['cook_time'])) echo $_POST['cook_time']; else echo $recipeData['cook_time']; ?>"/><br /><br />
         Description<br /><textarea id="formatted" name="description" rows="10" cols="80" /><?php if (isset($_POST['description'])) echo $_POST['description']; else echo $recipeData['description']; ?></textarea><br /><br />
         Ingredients<br /><textarea id="formatted" name="ingredients" rows="15" cols="80" /><?php if (isset($_POST['ingredients'])) echo $_POST['ingredients']; else echo $recipeData['ingredients']; ?></textarea><br /><br />
         Directions<br /><textarea id="formatted" name="directions" rows="15" cols="80" /><?php if (isset($_POST['directions'])) echo $_POST['directions']; else echo $recipeData['directions']; ?></textarea><br /><br />

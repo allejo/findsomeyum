@@ -70,86 +70,92 @@
             }
             
             
-            echo "            <div id=\"content\">
-                <div class=\"profile\">\n
-                <div class=\"avatar\">";
+            echo "            <div id=\"content\" class=\"clearfix\">
+                <div class=\"profile\">
+                    <div class=\"avatar\">\n";
             
             if (file_exists("./imgs/avatars/" . $user . ".png"))
             {
-                echo "                   <img src=\"./imgs/avatars/" . $user . ".png\" width=\"200\" height=\"200\">";
+                echo "                        <img src=\"./imgs/avatars/" . $user . ".png\" width=\"200\" height=\"200\">";
             }
             else if (file_exists("./imgs/avatars/" . $user . ".jpeg"))
             {
-                echo "                   <img class=\"avatar\" src=\"./imgs/avatars/" . $user . ".jpeg\" width=\"200\" height=\"200\">";
+                echo "                        <img src=\"./imgs/avatars/" . $user . ".jpeg\" width=\"200\" height=\"200\">";
             }
             else if (file_exists("./imgs/avatars/" . $user . ".jpg"))
             {
-                echo "                   <img class=\"avatar\" src=\"./imgs/avatars/" . $user . ".jpg\" width=\"200\" height=\"200\">";
+                echo "                        <img src=\"./imgs/avatars/" . $user . ".jpg\" width=\"200\" height=\"200\">";
             }
             else
             {
-                echo "                   <img class=\"avatar\" src=\"./imgs/avatars/none.gif\" width=\"200\" height=\"200\">";
+                echo "                        <img src=\"./imgs/avatars/none.gif\" width=\"200\" height=\"200\">";
             }
             
-            echo "\n</div><!-- End .avatar -->                   <div class=\"information\"><h2>";
+            echo "\n                    </div><!-- End .avatar -->
+
+                    <div class=\"information\">
+                        <h2>";
             
             echo XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $user), 0);
-            echo "</h2>           $myUserInfo[7]
-                   <br /><br />";
+            echo "</h2>\n                        " . $myUserInfo['rank'] . "
+                        <br /><br />";
             
             if (!empty($myUserInfo['first_name']))
             {
-	            echo "       <strong>Real Name</strong>: " . $myUserInfo['first_name'] . " " . $myUserInfo['last_name'];
+	            echo "\n                        <strong>Real Name</strong>: " . $myUserInfo['first_name'] . " " . $myUserInfo['last_name'] . "<br />";
             }
             
             if (!empty($myUserInfo['job']))
             {
-	            echo "<br /><strong>Job</strong>: " . $myUserInfo['job'];
+	            echo "\n                        <strong>Job</strong>: " . $myUserInfo['job'] . "<br />";
             }
             
             if (!empty($myUserInfo['hobbies']))
             {
-	            echo "<br /><strong>Hobbies</strong>: " . $myUserInfo['hobbies'];
+	            echo "\n                        <strong>Hobbies</strong>: " . $myUserInfo['hobbies'] . "<br />";
             }
             
             if ($myUserInfo['gender'] == "M")
             {
-	            echo "<br /><strong>Gender</strong>: Male";
+	            echo "\n                        <strong>Gender</strong>: Male<br />";
             }
             else if ($myUserInfo['gender'] == "F")
             {
-	            echo "<br /><strong>Gender</strong>: Female";
+	            echo "\n                        <strong>Gender</strong>: Female<br />";
             }
             
             if (!empty($myUserInfo['birthday']))
             {
-	            echo "<br /><strong>Birthday</strong>: " . $myUserInfo['birthday'];
+	            echo "\n                        <strong>Birthday</strong>: " . $myUserInfo['birthday'] . "<br />";
             }
             
             if (!empty($myUserInfo['registration_date']))
             {
-	            echo "<br /><strong>Member Since</strong>: " . $myUserInfo['registration_date'];
+	            echo "\n                        <strong>Member Since</strong>: " . $myUserInfo['registration_date'] . "<br />";
             }
             
             if (!empty($myUserInfo['bio']))
             {
-	            echo "<br /><strong>Biography</strong>: " . $myUserInfo['bio'];
+	            echo "\n                        <strong>Biography</strong>: <p>" . $myUserInfo['bio'] . "</p><br />";
             }
             
-			echo "</div><!-- End information -->";
+			echo "\n                    </div><!-- End .information -->";
 			
 			if (session_is_registered(ns_username))
 			{
-				echo "<div class=\"message\">
-	                   <a href=\"" . $_SERVER['REQUEST_URI'] . "&follow=$user\" class=\"download_button orange\">Follow</a>
-				       <a href=\"\" class=\"download_button orange\">Message</a><br /><br /><br />";
+				echo "\n\n                    <div class=\"message\">
+	                <a href=\"" . $_SERVER['REQUEST_URI'] . "&follow=$user\" class=\"download_button orange\">Follow</a>
+			<a href=\"\" class=\"download_button orange\">Message</a>
+                        <br />
+                        <br />
+                        <br />\n";
 			}
 			
-			echo "<center><h1>" . $totalFollowers . "</h1><strong>Followers</strong></center>";
+			echo "                        <center><h1>" . $totalFollowers . "</h1><strong>Followers</strong></center>";
 			
-			echo "</div> <!-- End .message -->
-			</div> <!-- End .profile -->
-            </div> <!-- End .content -->";
+			echo "\n                    </div> <!-- End .message -->
+	        </div> <!-- End .profile -->
+            </div> <!-- End .content -->\n";
             
             include("includes/footer.php");
         }

@@ -8,21 +8,51 @@
 
 html, body
 {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 100%;
-	color: #002400;
-	background: url("../imgs/wood_bg.png");
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    color: #002400;
+    background: url("../imgs/wood_bg.png");
 }
 
 *
 {
-	margin: 0px;
-	padding: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+h2 a
+{
+    text-decoration: none;
+    color: #CC6600;
 }
 
 .error
 {
-	color: red;
+    color: red;
+}
+
+.sidebar_left
+{
+    width: 250px;
+    float: left;
+}
+
+.sidebar_right
+{
+    width: 250px;
+    float: right;
+}
+
+.main_column_left
+{
+    width: 700px;
+    float: left;
+}
+
+.main_column_right
+{
+    width: 700px;
+    float: right;
 }
 
 #formatted
@@ -45,6 +75,12 @@ html, body
 {
     width: 1000px;
     margin: 0 auto;
+}
+
+#search
+{
+    display: none;
+    width: 100%;
 }
 
 #topMenuBar
@@ -152,6 +188,11 @@ html, body
     -webkit-border-radius: 10px 10px 10px 10px;
 }
 
+#content .front_page
+{
+    /* Place holder in order to use for mobile CSS */
+}
+
 .left_side
 {
     width: 50%;
@@ -174,28 +215,19 @@ html, body
     margin-left: 30px;
 }
 
-#content .watermark
-{
-    height: 300px;
-    opacity: 0.2;
-    background: url("../imgs/fruits_veggies/orange.png");
-    background-size: 200px 220px;
-    background-repeat: no-repeat;
-}
-
 #content .account td
 {
-	text-align: center;
+    text-align: center;
 }
 
 #content .account a
 {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 #content .account img
 {
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
 #content .blog a
@@ -229,31 +261,32 @@ html, body
 
 #content .profile .information
 {
-	width: 500px;
-	margin-left: 10px;
-	float: left;
+    width: 500px;
+    margin-left: 10px;
+    float: left;
 }
 
 #content .profile .message
 {
-	width: 200px;
-	float: right;
-}
-
-#content .profile .message
-{
-	float: right;
+    width: 200px;
+    float: right;
 }
 
 #content .profile .message a
 {
-	padding: 10px;
-	margin: 0px 5px;
+    padding: 10px;
+    margin: 0px 5px;
 }
 
 #content .profile .message h1, #content .profile .message strong
 {
-	margin: auto;
+    margin: auto;
+}
+
+#content .description
+{
+    max-width: 990px;
+    word-wrap: break-word;
 }
 
 #content .center
@@ -292,12 +325,12 @@ html, body
 
 #content .viewrecipe .author
 {
-	/*Just in case*/
+    /*Just in case*/
 }
 
 #content .viewrecipe .image
 {
-	/*Just in case*/
+    /*Just in case*/
 }
 
 #content .viewrecipe .login a
@@ -308,10 +341,10 @@ html, body
 
 #content .viewrecipe .rating img, #content .viewrecipe .rating small, #content .viewrecipe .rating span
 {
-	display: block;
-	line-height: 20px;
-	height: 20px;
-	float: left;
+    display: block;
+    line-height: 20px;
+    height: 20px;
+    float: left;
 }
 
 #content .viewrecipe .buttons
@@ -321,7 +354,7 @@ html, body
 
 #giveRating
 {
-	display: inline-block;
+    display: inline-block;
 }
 
 #star1, #star2, #star3, #star4, #star5
@@ -363,3 +396,203 @@ html, body
     color: #fdb913;
     text-decoration: none;
 }
+
+/* CLEARFIX */
+
+.clearfix:before, .clearfix:after {content: ".";display: block;height: 0;overflow: hidden;}
+.clearfix:after {clear: both;}
+.clearfix {zoom: 1;}
+
+/*
+@media only screen and (max-width: 480px)
+{
+    html, body
+    {
+        -webkit-text-size-adjust:none;
+        font-family:Helvetica, Arial, Verdana, sans-serif;
+        color: #000000;
+        background: url("../imgs/wood_bg.png");
+    }
+
+    div
+    {
+        clear: both !important;
+        display: block !important;
+        width: 100% !important;
+        float: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    img
+    {
+        max-width:100%;
+        height:auto;
+    }
+    
+    h1
+    {
+	    font-size: 1.1em;
+    }
+
+    #content
+    {
+        margin: 10px auto;
+        padding: 1em !important;
+        background: url("../imgs/dry_wall.png");
+        border-radius: 0px !important;
+        -moz-border-radius: 0px !important;
+        -webkit-border-radius: 0px !important;
+    }
+
+    #topMenuBar
+    {
+        margin: 0px auto;
+        height: 2.5em;
+        background: #fdb913 !important;
+        border-radius: 0px;
+        -webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 1) !important;
+        box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 1) !important;
+    }
+
+    #topMenuBar .links
+    {
+        margin-top: 1%;
+        margin-right: 20px;
+        font-size: 1.5em;
+        font-weight: bold;
+        text-decoration: none;
+        color: white !important;
+        display: none;
+    }
+
+    #topMenuBar .login-window
+    {
+        display: block !important;
+    }
+
+    #topMenuBar .logo
+    {
+        display: none;
+    }
+
+    #wrapper
+    {
+        width:100% !important;
+        overflow: hidden;
+    }
+
+    #featured
+    {
+    	font-size: .7em;
+        color: white;
+        margin: 10em auto;
+        width: 100%;
+    }
+
+    #featured img
+    {
+    	float: left;
+        margin: .7em;
+        height: 250px;
+        border-radius: 0px;
+        -moz-border-radius: 0px;
+        -webkit-border-radius: 0px;
+        width: 40%;
+        height: 40%;
+    }
+    
+    #featured .description
+    {
+    	width: 55% !important;
+	    height: 4em;
+	    overflow: hidden;
+    }
+
+    #search
+    {
+        display: block !important;
+        width:95%;
+        padding: 1em;
+        margin: 3em 0px;
+        font-size: 
+    }
+
+    #content .viewrecipe .title
+    {
+        color: #CC6600 !important;
+    }
+
+    #content .front_page
+    {
+        display: none !important;
+    }
+
+    #footer
+    {
+        margin: 0px auto;
+        height: 2.5em;
+        background: #fdb913 !important;
+        border-radius: 0px;
+        -webkit-box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 1) !important;
+        box-shadow: inset 0px 0px 0px 0px rgba(0, 0, 0, 1) !important;
+    }
+
+    #footer .copyright
+    {
+        color: white;
+        margin: 20px 0px;
+        padding-top: 15px;
+        text-align: center;
+    }
+
+    #footer .copyright a
+    {
+        color: black;
+        text-decoration: none;
+    }
+
+    #mask
+    {
+        visibility: hidden;
+    }
+
+    .login-popup
+    {
+        visibility: hidden;
+    }
+
+    img.btn_close
+    {
+        visibility: hidden;
+    }
+
+    fieldset {
+        visibility: hidden;
+    }
+
+    form.signin .textbox label { 
+        visibility: hidden;
+    }
+
+    form.signin .textbox span { 
+        visibility: hidden;
+    }
+
+    form.signin p, form.signin span { 
+        visibility: hidden;
+    } 
+
+    form.signin .textbox input { 
+        visibility: hidden;
+    }
+
+    form.signin input:-moz-placeholder { visibility: hidden; }
+    form.signin input::-webkit-input-placeholder { visibility: hidden;  }
+
+    .button { 
+        visibility: hidden;
+    }
+    .button:hover { visibility: hidden; }
+}
+*/

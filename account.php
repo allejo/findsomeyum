@@ -36,9 +36,9 @@
 	    			<td><a href="#"><img src="./imgs/sys/messages.png" /></a></td>
 	    		</tr>
 	    		<tr>
-	    			<td>My Recipes</td>
-	    			<td>Chat (Coming Soon)</td>
-	    			<td>Messages (Coming Soon)</td>
+	    			<td>My Posts</td>
+	    			<td><s>Chat</s></td>
+	    			<td><s>Messages</s><td>
 	    		</tr>
 	    		<tr>
 	    			<td><a href="#"><img src="./imgs/sys/search.png" /></a></td>
@@ -46,7 +46,7 @@
 	    			<td><a href="ucp.php"><img src="./imgs/sys/gear.png" /></a></td>
 	    		</tr>
 	    		<tr>
-	    			<td>Search (Coming Soon)</td>
+	    			<td><s>Search</s></td>
 	    			<td>Profile</td>
 	    			<td>Settings</td>
 	    		</tr>

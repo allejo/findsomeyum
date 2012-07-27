@@ -124,8 +124,8 @@
 
         if ($recipeData['user_id'] ==  XiON_getUserIDFromSession($dbc) || ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev" || $_SESSION["ns_userType"] == "moderator"))
         {
-            echo "\n                        <a href=\"editrecipe.php?recipeid=" . $recipeID . "\"><img src=\"imgs/sys/pencil.png\" width=\"30\" /></a>
-                        <a href=\"deleterecipe.php?recipeid=" . $recipeID ."\"><img src=\"imgs/sys/delete.png\" width=\"30\" /></a>";
+            echo "\n                        <a href=\"editrecipe.php?recipeid=" . $recipeID . "\"><img src=\"imgs/sys/pencil.png\" width=\"30\" alt=\"Edit Recipe\"/></a>
+                        <a href=\"deleterecipe.php?recipeid=" . $recipeID ."\"><img src=\"imgs/sys/delete.png\" width=\"30\" alt=\"Delete Recipe\"/></a>";
         }
 
         echo "\n                    </div> <!-- End .buttons -->\n";

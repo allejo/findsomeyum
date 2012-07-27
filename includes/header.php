@@ -39,6 +39,10 @@
     <head> 
         <title>FindSomeYum: <?php echo $row[1]; ?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <!--
+        <meta content='width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;' name='viewport' />
+        <meta name="viewport" content="width=device-width" />
+        -->
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
         <script type="text/javascript" src="./includes/javascript.js"></script>
         <script type="text/javascript" src="./includes/datetimepicker.js"></script>

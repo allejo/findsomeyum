@@ -31,9 +31,9 @@
     $recipesCountResult = mysqli_query($dbc, $recipesCount) OR die ("Error: " . mysqli_error($dbc));
     $recipesQueryData = mysqli_fetch_row($recipesCountResult);
     $numrows = $recipesQueryData[0];
-    $rows_per_page = 15;
-    $lastpage = ceil($numrows/$rows_per_page);
-
+    $rows_per_page = 10;
+    $lastpage = ceil($numrows/$rows_per_page)
+;
     $myRecipesQuery = "SELECT * FROM recipes ORDER BY last_activity DESC LIMIT " . ($pageno - 1) * $rows_per_page . ", " . $rows_per_page;
     $myRecipesResult = @mysqli_query($dbc, $myRecipesQuery) OR die ("Error: " . mysqli_error($dbc));
     $numberOfRows = mysqli_num_rows($myRecipesResult);
@@ -43,11 +43,14 @@
     if ($pageno < 1) { $pageno = 1; }
     if ($lastpage == 0) { $lastpage += 1; }
     
-    echo "<div id=\"content\">";
+    echo "<div id=\"content\" class=\"clearfix\">";
 
     if (session_is_registered(ns_username))
     {
-        echo "<a href=\"./newrecipe.php\" style=\"padding: 10px\" class=\"download_button orange\">Post New Recipe</a><br /><br />";
+        echo "<a href=\"./newrecipe.php\" style=\"padding: 10px\" class=\"download_button orange\">Post New Recipe</a>";
+        echo "<form style=\"margin-top: 5px; margin-bottom: 20px; float: right;\" method=\"POST\" action=\"search.php\">
+        <input style=\"float:right\" name=\"search\" placeholder=\"Search\" />
+        </form><br /><br />";
     }
     
     for ($i = 0; $i < $numberOfRows; $i++)
@@ -56,13 +59,29 @@
 
         if ($row['visible'] == 1 || ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev" || $_SESSION["ns_userType"] == "moderator"))
         {
-            echo "\n                    <h2><a href=\"viewrecipe.php?recipeid=$row[0]\">$row[3]</a>";
+
+            echo "\n                    <table cellspacing=\"10\">
+                            <tr>";
+
+            if ($row['images'] != "")
+            {
+                echo "\n                    <td><img src=\"imgs/recipes/" . $row['images'] . "\" width=\"200px\"/></td>";
+            }
+            else
+            {
+                echo "<td><img src=\"imgs/recipes/plate.png\" width=\"200px\"/></td>";
+            }
+
+            echo "                                <td><h2><a href=\"viewrecipe.php?recipeid=$row[0]\">$row[3]</a>";
             echo XiON_getStarRating($dbc, XiON_getRating($dbc, $row['post_id']));
             
             echo "</h2>
                                 by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $row[1]), 1) . "<br /><br />
-                                $row[9]<br /><br />
-                                Difficulty: $row[6] | Prep Time: $row[7] | Cook Time: $row[8]";
+                                <p class=\"description\">$row[9]</p><br /><br />
+                                Difficulty: $row[6] | Prep Time: $row[7] | Cook Time: $row[8]
+                                </td>
+                            </tr>
+                        </table>";
 
             if ($i + 1 != $numberOfRows)
             {

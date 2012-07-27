@@ -17,6 +17,8 @@
     include("includes/header.php");
     include("includes/menubar.php");
 ?>
+            <center><input id="search" type="text" name="search" /></center>
+
             <div id="featured">
                 <img src="http://www.italian-food.us/vealsaltimboccalarge.jpg">
                 
@@ -35,8 +37,37 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ut posuere tellus
                 </div>
             </div>
             
-            <div id="content">
-                <?php echo $row[2]; ?>
+            <div id="content" class="clearfix">
+                <div class="main_column_left">
+                    <?php echo $row[2]; ?>
+                </div>
+                <div class="side_bar_right">
+                    <h3>Latest Recipes</h3>
+                    <hr />
+<?php
+    $myRecipesQuery = "SELECT * FROM recipes ORDER BY last_activity DESC LIMIT 5";
+    $myRecipesResult = @mysqli_query($dbc, $myRecipesQuery) OR die ("Error: " . mysqli_error($dbc));
+    $numberOfRows = mysqli_num_rows($myRecipesResult);
+
+    for ($i = 0; $i < $numberOfRows; $i++)
+    {
+        $row = mysqli_fetch_array($myRecipesResult);
+
+        if ($row['visible'] == 1)
+        {
+            echo "\n                    <strong><small><a href=\"viewrecipe.php?recipeid=$row[0]\">$row[3]</a></small></strong>";
+            
+            echo "                                <small>by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $row[1]), 1) . "</small><br />
+                                <small class=\"description\">$row[9]</small><br />";
+
+            if ($i + 1 != $numberOfRows)
+            {
+                echo "<br /><hr /><br />";
+            }
+        }
+    }
+?>
+                </div>
             </div>
 <?php
     include("includes/footer.php");
