@@ -39,11 +39,40 @@ echo $row[2] . "
         $getPayPalStatus = "SELECT * FROM sales WHERE email = '" . $myEmail[0] . "' LIMIT 1";
         $getPayPalData = @mysqli_query($dbc, $getPayPalStatus);
         $isPayPalVerified = mysqli_num_rows($getPayPalData);
+
+        if ($isPayPalVerified == 1)
+        {
+?>
+                <!-- Annual Classes 5%-->
+                <div class="clearfix">
+                    <span style="width:50%; float: left">Annual Classes $1520 (w/ 5% Discount)</span>
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                        <input type="hidden" name="cmd" value="_s-xclick">
+                        <input type="hidden" name="hosted_button_id" value="ZZFH5AMKEXT98">
+                        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                        <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                    </form>
+                </div>
+                <br />
+                <!-- Monthly Classes 5%-->
+                <div class="clearfix">
+                    <span style="width:50%; float: left">Monthly Class $142.50 (w/ 5% Discount)</span>
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                        <input type="hidden" name="cmd" value="_s-xclick">
+                        <input type="hidden" name="hosted_button_id" value="EZM3DKDWPDWXS">
+                        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                        <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+                    </form>
+                </div>
+<?php
+        }
+        else
+        {
 ?>
                 <!-- Annual Classes -->
-                <span>Annual Classes $1600</span>
-                <div class="right_side" align="center">
-                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                <div class="clearfix">
+                    <span style="width:50%; float: left">Annual Classes $1600</span>
+                    <form style="float:left" action="https://www.paypal.com/cgi-bin/webscr" method="post">
                         <input type="hidden" name="cmd" value="_s-xclick">
                         <input type="hidden" name="hosted_button_id" value="XSLNDSNVVKYXG">
                         <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
@@ -51,54 +80,21 @@ echo $row[2] . "
                     </form>
                 </div>
                 <br />
-                <br />
-                <br />
-                <br />
                 <!-- Monthly Classes -->
-                <span>Monthly Class $150</span>
-                <div class="right_side" align="center">
-                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                <div class="clearfix">
+                    <span style="width:50%; float: left">Monthly Class $150</span>
+                    <form style="float:left" action="https://www.paypal.com/cgi-bin/webscr" method="post">
                         <input type="hidden" name="cmd" value="_s-xclick">
                         <input type="hidden" name="hosted_button_id" value="SD7X5EKXVTPK4">
                         <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
                         <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
                     </form>
                 </div>
-                <br />
-                <br />
-                <br />
-                <br />
-
-<?php
-        if ($isPayPalVerified == 1)
-        {
-?>
-
-                <span>Website Membership</span>
-                <div class="right_side" align="center">
-                    <A HREF="https://www.paypal.com/cgi-bin/webscr?cmd=_subscr-find&alias=RUFGB78GM37T6">
-                        <IMG SRC="https://www.paypalobjects.com/en_US/i/btn/btn_unsubscribe_LG.gif" BORDER="0">
-                    </A>
-                </div>
-            </div> <!-- End #content -->
 <?php
         }
-        else
-        {
 ?>
-                <!-- Membership For Website -->
-                <span>Website Membership</span>
-                <div class="right_side" align="center">
-                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
-                        <input type="hidden" name="cmd" value="_s-xclick">
-                        <input type="hidden" name="hosted_button_id" value="5TD7SD7HX46ZY">
-                        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_subscribeCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-                        <img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-                    </form>
-                </div>
             </div> <!-- End #content -->
 <?php
-        }
     }
     else
     {

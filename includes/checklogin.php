@@ -44,7 +44,7 @@
         $_SESSION["ns_username"] = $myusername;
         $_SESSION["ns_userType"] = $row[1];
         session_register("ns_username");
-        header("location:../recipes.php");
+        header("location:../account.php");
     }
     else
     {

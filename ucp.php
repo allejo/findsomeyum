@@ -167,71 +167,54 @@
                 </p>
                 <br />
                 <form style="text-align:justify;" action="./ucp.php" method="post">
-                    <span>Current Password</span>
-                    <div class="right_side">
-                        <input type="password" name="currentpassword" size="22" maxlength="30" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Current Password</span>
+                        <input style="float: left" type="password" name="currentpassword" size="22" maxlength="30" />
                     </div>
-                    <br />
                     <br />
                     <hr />
                     <br />
-                    <span>Username</span>
-                    <div class="right_side">
-                        <input type="text" readonly="readonly" name="username" size="22" maxlength="30" value="<?php echo "{$_SESSION['ns_username']}"; ?>" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Username</span>
+                        <input style="float: left" type="text" readonly="readonly" name="username" size="22" maxlength="30" value="<?php echo "{$_SESSION['ns_username']}"; ?>" />
                     </div>
-                    <br />
-                    <span>First Name</span>
-                    <div class="right_side">
-                        <input type="text" name="first_name" size="22" maxlength="20" value="<?php if (isset($_POST['first_name'])) echo $_POST['first_name']; else echo $myUserData['first_name']; ?>" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">First Name</span>
+                        <input style="float: left" type="text" name="first_name" size="22" maxlength="20" value="<?php if (isset($_POST['first_name'])) echo $_POST['first_name']; else echo $myUserData['first_name']; ?>" />
                     </div>
-                    <br />
-                    <span>Last Name</span>
-                    <div class="right_side">
-                        <input type="text" name="last_name" size="22" maxlength="30" value="<?php if (isset($_POST['last_name'])) {echo $_POST['last_name'];} else {echo $myUserData['last_name'];} ?>" /></td>
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Last Name</span>
+                        <input style="float: left" type="text" name="last_name" size="22" maxlength="30" value="<?php if (isset($_POST['last_name'])) {echo $_POST['last_name'];} else {echo $myUserData['last_name'];} ?>" /></td>
                     </div>
-                    <br />
-                    <span>Email</span>
-                    <div class="right_side">
-                        <input type="text" name="email" size="22" maxlength="40" value="<?php if (isset($_POST['email'])) {echo $_POST['email'];} else {echo $myUserData['email'];} ?>" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Email</span>
+                        <input style="float: left" type="text" name="email" size="22" maxlength="40" value="<?php if (isset($_POST['email'])) {echo $_POST['email'];} else {echo $myUserData['email'];} ?>" />
                     </div>
-                    <br />
                     <br />
                     <hr />
                     <br />
-                    <span>Gender</span>
-                    <div class="right_side">
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Gender</span>
                         <input type="radio" name="gender" value="F" <?php if ((isset($_POST['gender']) && $_POST['gender'] == "F") || $myUserData['gender'] == "F") {echo " checked";} ?>><small>Female</small>
                         <input type="radio" name="gender" value="M" <?php if ((isset($_POST['gender']) && $_POST['gender'] == "M") || $myUserData['gender'] == "M") {echo " checked";} ?>><small>Male</small>
                         <input type="radio" name="gender" value="" <?php if ((isset($_POST['gender']) && $_POST['gender'] == "") || $myUserData['gender'] == "") {echo " checked";} ?>> <small>Prefer not to Answer</small>
                     </div>
-                    <br />
-                    <span>Birthday</span>
-                    <div class="right_side">
-                        <input id="bday" name="bday" size="22" maxlength="30" value="<?php if (isset($_POST['bday'])) {echo $_POST['bday'];} else {echo $myUserData['birthday'];} ?>"> <tt><em>(YYYY-MM-DD)</em></tt>
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Birthday</span>
+                        <input style="float:left" id="bday" name="bday" size="22" maxlength="30" value="<?php if (isset($_POST['bday'])) {echo $_POST['bday'];} else {echo $myUserData['birthday'];} ?>"> <tt><em>(YYYY-MM-DD)</em></tt>
                     </div>
-                    <br />
-                    <span>Job</span>
-                    <div class="right_side">
-                        <input type="text" name="job" size="22" maxlength="50" value="<?php if (isset($_POST['job'])) {echo $_POST['job'];} else {echo $myUserData['job'];} ?>" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Job</span>
+                        <input style="float: left" type="text" name="job" size="22" maxlength="50" value="<?php if (isset($_POST['job'])) {echo $_POST['job'];} else {echo $myUserData['job'];} ?>" />
                     </div>
-                    <br />
-                    <span>Hobbies</span>
-                    <div class="right_side">
-                        <input type="text" name="hobbies" size="22" maxlength="50" value="<?php if (isset($_POST['hobbies'])) {echo $_POST['hobbies'];} else {echo $myUserData['hobbies'];} ?>" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Hobbies</span>
+                        <input style="float:left" type="text" name="hobbies" size="22" maxlength="50" value="<?php if (isset($_POST['hobbies'])) {echo $_POST['hobbies'];} else {echo $myUserData['hobbies'];} ?>" />
                     </div>
-                    <br />
-                    <span>Biography</span>
-                    <div class="right_side">
-                        <textarea name="bio" rows="10" cols="40"><?php if (isset($_POST['bio'])) {echo $_POST['bio'];} else {echo $myUserData['bio'];} ?></textarea>
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Biography</span>
+                        <textarea style="float: left" name="bio" rows="10" cols="40"><?php if (isset($_POST['bio'])) {echo $_POST['bio'];} else {echo $myUserData['bio'];} ?></textarea>
                     </div>
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
-                    <br />
 <?php
     if ($_SESSION["ns_userType"] == "admin" || $_SESSION["ns_userType"] == "editor" || $_SESSION["ns_userType"] == "systemDev" || $_SESSION["ns_userType"] == "moderator")
     {
@@ -239,32 +222,29 @@
                     <br />
                     <hr />
                     <br />
-                    <span>Rank</span>
-                    <div class="right_side">
-                        <input type="text" name="rank" size="22" maxlength="30" value="<?php if (isset($_POST['rank'])) {echo $_POST['rank'];} else {echo $myUserData['rank'];} ?>" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Rank</span>
+                        <input style="float: left" type="text" name="rank" size="22" maxlength="30" value="<?php if (isset($_POST['rank'])) {echo $_POST['rank'];} else {echo $myUserData['rank'];} ?>" />
                     </div>
-                    <br />
 <?php
     }
 ?>
                     <br />
                     <hr />
                     <br />
-                    <span>New Password</span>
-                    <div class="right_side">
-                        <input type="password" name="newpassword" size="22" maxlength="30" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">New Password</span>
+                        <input style="float:left" type="password" name="newpassword" size="22" maxlength="30" />
                     </div>
-                    <br />
-                    <span>Confirm New Password</span>
-                    <div class="right_side">
-                        <input type="password" name="confirmnewpassword" size="22" maxlength="30" />
+                    <div class="clearfix">
+                        <span style="width: 50%; float: left">Confirm New Password</span>
+                        <input style="float: left" type="password" name="confirmnewpassword" size="22" maxlength="30" />
                     </div>
-                    <br />
                     <br />
                     <hr />
                     <br />
                     <br />
-                    <input type="submit" name="submit" value="Update Profile" />
+                    <input id="formatted" type="submit" name="submit" value="Update Profile" />
                     <input type="hidden" name="submitted" value="TRUE" />
                 </form>
             </div>

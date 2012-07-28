@@ -83,7 +83,7 @@
                 <div class="main_column_left">
                     <?php echo $row[2]; ?>
                 </div>
-                <div class="side_bar_right">
+                <div class="sidebar_right">
                     <h3>Latest Recipes</h3>
                     <hr />
 <?php
@@ -108,9 +108,31 @@
             }
         }
     }
+
+    echo "<br /><h3>Team Updates</h3>
+    <hr />";
+
+    $blogQuery = "SELECT * FROM blog ORDER BY date_posted DESC LIMIT 3";
+    $blogResult = @mysqli_query($dbc, $blogQuery) OR die ("Error: " . mysqli_error($dbc));
+    $numberOfPosts = mysqli_num_rows($blogResult);
+
+    for ($i = 0; $i < $numberOfPosts; $i++)
+    {
+        $row = mysqli_fetch_array($blogResult);
+
+        echo "\n                    <strong><small><a href=\"blog.php?view=$row[0]\">$row[2]</a></small></strong>";
+        
+        echo "                                <small>by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $row[1]), 1) . "</small><br />
+                            <small class=\"description\">" . substr($row[3], 0, 100) . "...</small><br />";
+
+        if ($i + 1 != $numberOfRows)
+        {
+            echo "<br /><hr /><br />";
+        }
+    }
 ?>
-                </div>
-            </div>
+                </div> <!-- End .sidebar_right -->
+            </div> <!-- End #content -->
 <?php
     include("includes/footer.php");
 ?>

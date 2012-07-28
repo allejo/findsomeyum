@@ -48,10 +48,10 @@
     if (session_is_registered(ns_username))
     {
         echo "<a href=\"./newrecipe.php\" style=\"padding: 10px\" class=\"download_button orange\">Post New Recipe</a>";
-        echo "<form style=\"margin-top: 5px; margin-bottom: 20px; float: right;\" method=\"POST\" action=\"search.php\">
-        <input style=\"float:right\" name=\"search\" placeholder=\"Search\" />
-        </form><br /><br />";
     }
+    echo "<form style=\"margin-top: 5px; margin-bottom: 20px; float: right;\" method=\"POST\" action=\"search.php\">
+    <input style=\"float:right\" name=\"search\" placeholder=\"Search\" />
+    </form><br /><br />";
     
     for ($i = 0; $i < $numberOfRows; $i++)
     {
@@ -78,7 +78,7 @@
             echo "</h2>
                                 by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $row[1]), 1) . "<br /><br />
                                 <p class=\"description\">$row[9]</p><br /><br />
-                                Difficulty: $row[6] | Prep Time: $row[7] | Cook Time: $row[8]
+                                <strong>Difficulty:</strong> $row[6] | <strong>Prep Time:</strong> $row[7] minutes | <strong>Cook Time:</strong> $row[8] minutes
                                 </td>
                             </tr>
                         </table>";

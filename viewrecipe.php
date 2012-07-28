@@ -136,9 +136,8 @@
                     </div> <!-- End .buttons -->\n";
     }
     echo "\n                    <span class=\"title\">" . XiON_checkForReport($dbc, $recipeID, null, 0) . $recipeData['title'] . "</span>
-                    <span class=\"category\">[" . $recipeData['category'] . "]</span>
-                    <br />\n";
-    echo "\n                    <div class=\"author\">
+                    <span class=\"category\">[" . $recipeData['category'] . "]</span>\n";
+    echo "\n                    <div class=\"author\" style=\"clear:both; padding-top: 5px\">
                         by " . XiON_getUserProfileStylized($dbc, XiON_getUsernameFromID($dbc, $recipeData['user_id']), 1) . "
                     </div> <!-- End .author -->\n\n";
     echo "                    <div class=\"rating\">" . XiON_getStarRating($dbc, XiON_getRating($dbc, $recipeID)) . " 

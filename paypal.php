@@ -27,13 +27,27 @@
    $firstname = $_POST["first_name"];
    $lastname = $_POST["last_name"];
    $email = $_POST["payer_email"];
+   $address_name = $_POST["address_name"];
+   $address_country = $_POST["address_country"];
+   $address_country_code = $_POST["address_country_code"];
+   $address_zip = $_POST["address_zip"];
+   $address_state = $_POST["address_state"];
+   $address_city = $_POST["address_city"];
+   $address_street = $_POST["address_street"];
 
    if ($transactionID AND $amount)
    {
       // query to save data
       $myUserID = XiON_getUserIDFromSession($dbc);
 
-      $transactionQuery = "INSERT INTO sales (sale_id, transaction_id, item, amount, currency, payment_date, payment_status, first_name, last_name, email) VALUES (NULL, '$transactionID', '$item', '$amount', '$curreny', '$datefields', '$status', '$firstname', '$lastname', '$email')";
+      $transactionQuery = "INSERT INTO sales (sale_id, transaction_id, item, amount, currency, payment_date, payment_status, first_name, last_name, email, address_name, address_country, address_country_code, address_zip, address_state, address_city, address_street) VALUES (NULL, '$transactionID', '$item', '$amount', '$curreny', '$datefields', '$status', '$firstname', '$lastname', '$email', '$address_name', '$address_country', '$address_country_code', '$address_zip', '$address_state', '$address_city', '$address_street')";
       $insertTransaction = @mysqli_query($dbc, $transactionQuery);
+
+      /*
+      $myFile = "paypal.log";
+      $fh = fopen($myFile, 'w') or die("can't open file");
+      fwrite($fh, mysqli_error($dbc));
+      fclose($fh);
+      */
    }
 ?>

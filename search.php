@@ -13,12 +13,7 @@
         software.
     */
     session_start();
-    
-    if(!session_is_registered(ns_username)) //If the user is not logged in, make them login
-    {
-        header("location:membership.php");
-    }
-    
+
     require_once('admin/includes/mysql_connection.php');
     
     if (isset($_POST['search']))
